@@ -4,21 +4,45 @@ import random
 # character level perturbations.
 def insert_space(word):
     """
-    insert spaces at random places in words to make them 
-    look like different words to fool the model.
-    Performs a single split and returns a list of two 
-    new strings.
+    Insert space at a random position in the word
+
+    word="Somesh"
+    edited_word=insert_space(word)
+    print(edited_word)
+    S omesh
+
+    :param word - word to be edited
+
+    -returns edited word a random space in between
     """
+
     index = random.randint(0, len(word))  # select random index
     return word[:index] + " " + word[index:]  # insert space
 
 
 def swap(word):
     """
-    swaps random two adjacent letters but keeps 
-    intact the first and last letter. Naturally a string
-    of size>=4 is required for this.
+    Swaps two adjacent characters in a word which are not at the either end
+    Implies that the word is at least four characters long
+
+    word=input()
+
+    #If input's length is less than 4
+    swap(word)      #Input Hey
+    Assertion Error
+
+    #If input's lenght is greater than or equal to 4
+    swap(word)      #Input WHAT
+    WAHT
+    
+    :param word - word to be edited
+
+    -returns word with random character swaps
     """
+
+    assert (
+        len(word) >= 4
+    ), "Word needs to have a minimum length of 4 for a swap operation"
     charlist = list(word)
     index = random.randint(1, len(word) - 3)  # select random offset for tuple
     charlist[index], charlist[index + 1] = (
@@ -30,9 +54,26 @@ def swap(word):
 
 def delete(word):
     """
-    Deletes a random character from a word
-    except for first and last character.
+    Deletes a random character which is not at the either end
+    Implies that the word is at least three characters long
+
+    word=input()
+
+    #If input's length is less than 3
+    swap(word)      #Input He
+    Assertion Error
+
+    #If input's lenght is greater than or equal to 3
+    swap(word)      #Input Hey
+    Hy
+    
+    :param word - word to be edited
+
+    -returns word with random character deletion
     """
+    assert (
+        len(word) >= 3
+    ), "Word needs to have a minimum length of 3 for a delete operation"
     index = random.randint(1, len(word) - 2)  # select random index
     return word[:index] + word[index + 1 :]  # delete index
 
