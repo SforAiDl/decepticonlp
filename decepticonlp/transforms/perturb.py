@@ -8,26 +8,19 @@ def insert_space(word):
     Performs a single split and returns a list of two 
     new strings.
     """
-    length=len(word)
-    split_int=np.random.randint(0,high=length)
-    split_list=word.split(word[split_int])
+    index=random.randint(0,len(word))
+    return word[:index]+' '+word[index:]
 
-    if len(split_list[0])>len(split_list[1]): # adds word[split_int] to string with lesser length.
-        split_list[1]+=word[split_int]
-    else:
-        split_list[0]+=word[split_int]    
-
-    return split_list
 def swap(word):
     """
     swaps random two adjacent letters but keeps 
     intact the first and last letter. Naturally a string
     of size>=4 is required for this.
     """
-    chars=list(word)
-    i = random.randint(1,len(word)-2)
-    chars[i],chars[i+1]=chars[i+1],chars[i]
-    return ''.join(chars)
+    charlist=list(word)
+    index = random.randint(1,len(word)-2)
+    chars[index],chars[index+1]=charlist[index+1],charlist[index]
+    return ''.join(charlist)
 
 def delete(word):
     """
