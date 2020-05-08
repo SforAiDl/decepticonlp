@@ -8,8 +8,8 @@ def insert_space(word):
     Performs a single split and returns a list of two 
     new strings.
     """
-    index=random.randint(0,len(word))
-    return word[:index]+' '+word[index:]
+    index=random.randint(0,len(word)) #select random index
+    return word[:index]+' '+word[index:] #insert space
 
 def swap(word):
     """
@@ -18,8 +18,8 @@ def swap(word):
     of size>=4 is required for this.
     """
     charlist=list(word)
-    index = random.randint(1,len(word)-2)
-    chars[index],chars[index+1]=charlist[index+1],charlist[index]
+    index = random.randint(1,len(word)-3) #select random offset for tuple
+    charlist[index],charlist[index+1]=charlist[index+1],charlist[index] #swap tuple
     return ''.join(charlist)
 
 def delete(word):
@@ -27,16 +27,9 @@ def delete(word):
     Deletes a random character from a word
     except for first and last character.
     """
-    word_part=list(word[1:-1])
-    length=len(word_part)
-    delete_index=np.random.randint(0,high=length)
+    index=random.randint(1,len(word)-2) #select random index
+    return word[:index]+word[index+1:] #delete index
 
-    word_part.pop(delete_index)
-
-    word_part.append(word[-1])
-    word_part=list(word[0])+word_part
-
-    return ''.join(word_part)
 def visual_similar_chars(word,*arg):
 
     method_pick=np.random.randint(0,len(arg))   
