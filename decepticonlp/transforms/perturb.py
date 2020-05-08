@@ -1,4 +1,5 @@
-import numpy as np 
+import numpy as np
+import random
 # character level perturbations.
 def insert_space(word):
     """
@@ -23,34 +24,10 @@ def swap(word):
     intact the first and last letter. Naturally a string
     of size>=4 is required for this.
     """
-    def swap_two_chars(char_list,a,b): # make as decorator later.
-        s=''
-        s=char_list[a]
-        char_list[a]=char_list[b]
-        char_list[b]=s
-        
-    word_part=list(word[1:-1]) # want to deal with all letters except first and last.
-    length=len(word_part)
-    int_pick=np.random.randint(0,length)
-     
-   
-    if int_pick==0:
-        swap_two_chars(word_part,1,0)
-
-    elif int_pick==length-1:
-        swap_two_chars(word_part,length-1,length-2)
-
-    else:
-        # choose to swap with left of right.
-        l_r=np.random.randint(0,high=2)
-        if l_r==0:
-            swap_two_chars(word_part,int_pick,int_pick-1)
-        else:
-            swap_two_chars(word_part,int_pick,int_pick+1)
-
-    word_part.append(word[-1])
-    word_part=list(word[0])+word_part
-    return ''.join(word_part)
+    chars=list(word)
+    i = random.randint(1,len(word)-2)
+    chars[i],chars[i+1]=chars[i+1],chars[i]
+    return ''.join(chars)
 
 def delete(word):
     """
