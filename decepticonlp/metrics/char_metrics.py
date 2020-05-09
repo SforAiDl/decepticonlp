@@ -56,3 +56,25 @@ def levenshtein(text1, text2, normalize="none"):
         return distance / (max(size_x, size_y) - 1)
     else:
         return matrix[size_x - 1, size_y - 1]
+
+
+def jaccard(text1, text2):
+    """
+    Calculate Jaccard Distance :
+    J(X,Y) = |X∩Y| / |X∪Y|
+    Jaccard Distance = 1-J(X,Y)
+
+    Example:
+    from perturb import jaccard
+    print(jaccard("Hey","HEY"))
+    0.8
+
+    :params
+    :text1, text2 - Both the inputs
+    
+    returns jaccard distance
+    """
+
+    x, y = set(text1), set(text2)
+    n, d = len(x.intersection(y)), len(x.union(y))
+    return 1 - (n / d)
