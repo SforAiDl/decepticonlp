@@ -5,7 +5,7 @@
 import pytest
 
 
-from decepticonlp import decepticonlp
+from decepticonlp import transforms
 
 
 @pytest.fixture
