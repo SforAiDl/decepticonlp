@@ -1,11 +1,9 @@
-#!/usr/bin/env python
-
-"""Tests for `decepticonlp` package."""
+"""Tests for `transforms` package."""
 
 import pytest
 
 
-from decepticonlp import decepticonlp
+from decepticonlp import transforms
 
 
 @pytest.fixture
