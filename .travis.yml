@@ -12,8 +12,11 @@ install:
   - pip install -r requirements.txt
   - pip install pytest-cov
   - pip install codecov
+  - pip install black
 # command to run tests
 script:
+  - black --check decepticonlp
+  - black --check tests
   - pytest --cov
 after_success:
   - codecov # submit coverage
