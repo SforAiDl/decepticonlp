@@ -10,9 +10,10 @@ install:
   - python --version
   - pip install -U pip
   - pip install -r requirements.txt
+  - pip install pytest-cov
   - pip install codecov
 # command to run tests
 script:
-  - pytest
+  - pytest --cov
 after_success:
   - codecov # submit coverage
