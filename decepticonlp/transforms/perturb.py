@@ -103,5 +103,31 @@ def visual_similar_chars(word, *arg):
     return "".join(perturbed_array)
 
 
+def midShuffle(word):
+    '''
+    shuffles the characters of a word, barring the initial and last character
+    
+    
+    word = "Adversarial"
+    print(midShuffle('Adversarial'))
+    Aaidsvrreal
+    
+    :param word : word to be shuffled
+    
+    returns shuffled word with first and last character intact
+    
+    '''
+    if len(word) <= 3:
+        return word
+
+    # Split word into first & last letter, and middle letters
+    first, mid, last = word[0], word[1:-1], word[-1]
+    
+    mid = list(mid)
+    random.shuffle(mid)
+
+    return first + ''.join(mid) + last
+
+
 if __name__ == "__main__":
     print(visual_similar_chars("adversarial"))
