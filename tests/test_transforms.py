@@ -1,6 +1,4 @@
-#!/usr/bin/env python
-
-"""Tests for `decepticonlp` package."""
+"""Tests for `transforms` package."""
 
 import pytest
 
