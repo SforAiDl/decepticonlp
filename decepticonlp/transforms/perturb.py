@@ -79,20 +79,29 @@ def delete(word):
 
 
 def visual_similar_chars(word, *arg):
+    """
+    unicode_array is a list of different unicodes.
+    each char of the word is perturbed by a unicode chosen at random
+    from the unicode_array.
+    
+    eg:
+    input : adversarial
+    output : a̐d̅v̕e̒ŕŝa̅r̕îál̂
+    """
 
-    method_pick = np.random.randint(0, len(arg))
-    if arg[method_pick] == "unicode":
-        """
-        get diacritic  characters
-        """
-        char_array = np.array(list(word))
-        diacritic = np.char.add(char_array, u"\u0301")
-        return diacritic
-    if arg[method_pick] == "visual":
-        """
-        get visually similar chars. like @ for a. 0 for O.
-        """
-        return None
+    unicode_array = np.array(
+        [u"\u0301", u"\u0310", u"\u0305", u"\u0315", u"\u0312", u"\u0302"]
+    )
+
+    char_array = np.array(list(word))
+
+    int_pick = np.random.randint(0, high=unicode_array.shape[0], size=len(word))
+
+    picked_unicode = unicode_array[int_pick]
+
+    perturbed_array = np.char.add(char_array, picked_unicode)
+    return "".join(perturbed_array)
 
 
-print(visual_similar_chars("shashank", "unicode", "visual"))
+if __name__ == "__main__":
+    print(visual_similar_chars("adversarial"))
