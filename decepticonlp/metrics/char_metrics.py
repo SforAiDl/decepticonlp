@@ -21,12 +21,15 @@ def levenshtein(text1, text2, normalize="none"):
 
 
     :params
-    :text1, text2 - Both the inputs
-    :normalize - Pass "none" for getting the raw distance
-               - Pass "sum" for getting Normalized Levenshtein Distance
-               - Pass "lcs" for getting #Normalize LCS
+    :text1 : First string to be compared
+    :text2 : Second string to be compared
+    :normalize: pass "sum" for total Levenshtein distance, "lcs" for maximum normalization, "none" default
+    :type text1: String
+    :type text2: String
+    :type normalize: String
     
     returns levenshtein distance
+    :return type: float
 
     IMPORTANT NOTE :
     The normalized distance is not a metric, as it violates the triangle inequality.
@@ -69,8 +72,10 @@ def jaccard(text1, text2):
     print(jaccard("Hey","HEY"))
     0.8
 
-    :params
-    :text1, text2 - Both the inputs
+    :text1 : First string to be compared
+    :text2 : Second string to be compared
+    :type text1: String
+    :type text2: String
     
     returns jaccard distance
     """
@@ -103,8 +108,12 @@ def euclid(text1, text2, norm=False):
     0.7071067811865476
 
     :params
-    :text1, text2 - Both the inputs
-    :norm - True, False : If True, distance is normalized between 0 and 1
+    :text1 : First string to be compared
+    :text2 : Second string to be compared
+    :normalize: False (default) to return the euclidean distance, True to return standardised (between 0 and 1) euclidean distance
+    :type text1: String
+    :type text2: String
+    :type normalize: Boolean
     
     returns euclidean distance
     """
