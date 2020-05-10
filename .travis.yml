@@ -1,0 +1,20 @@
+language: python
+python:
+  - "3.6"      # current default Python on Travis CI
+  - "3.7"
+  - "3.8"
+# command to install dependencies
+install:
+  - python --version
+  - pip install -U pip
+  - pip install -r requirements.txt
+  - pip install pytest-cov
+  - pip install codecov
+  - pip install black
+# command to run tests
+script:
+  - black --check decepticonlp
+  - black --check tests
+  - pytest --cov='./decepticonlp/'
+after_success:
+  - codecov # submit coverage
