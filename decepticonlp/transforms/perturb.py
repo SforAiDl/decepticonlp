@@ -17,7 +17,7 @@ def insert_space(word, ignore=True):
 
     -returns edited word a random space in between
     """
-    if ignore and (" " in word or len(word)<2):
+    if ignore and (" " in word or len(word) < 2):
         return word
 
     assert " " not in word, "given string is not a word"
@@ -26,7 +26,7 @@ def insert_space(word, ignore=True):
         len(word) >= 2
     ), "Word needs to have a minimum length of 2 for a swap operation"
 
-    index = random.randint(1, len(word)-1)  # select random index
+    index = random.randint(1, len(word) - 1)  # select random index
     return word[:index] + " " + word[index:]  # insert space
 
 
@@ -50,7 +50,7 @@ def swap(word, ignore=True):
 
     -returns word with random character swaps
     """
-    if ignore and (" " in word or len(word)<4):
+    if ignore and (" " in word or len(word) < 4):
         return word
 
     assert " " not in word, "given string is not a word"
@@ -87,9 +87,9 @@ def delete(word, ignore=True):
 
     -returns word with random character deletion
     """
-    if ignore and (" " in word or len(word)<3):
+    if ignore and (" " in word or len(word) < 3):
         return word
-    
+
     assert " " not in word, "given string is not a word"
 
     assert (
