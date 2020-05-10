@@ -54,9 +54,9 @@ def test_perturb_swap(word, expected_result):
 
 def test_perturb_swap_with_character_size_less_than_four():
     with pytest.raises(AssertionError):
-        perturb.swap("Ton")
+        perturb.swap("Ton", ignore=False)
 
 
 def test_perturb_swap_with_whitespace():
     with pytest.raises(AssertionError):
-        perturb.swap("is wrong")
+        perturb.swap("is wrong", ignore=False)
