@@ -68,6 +68,7 @@ def test_jaccard(text1, text2, expected_result):
     err = jaccard(text1, text2) - expected_result
     assert -1e-5 < err < 1e-5
 
+
 @pytest.mark.parametrize(
     "text1, text2, window, expected_result",
     [

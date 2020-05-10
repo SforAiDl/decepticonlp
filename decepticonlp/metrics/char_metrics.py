@@ -81,9 +81,11 @@ def jaccard(text1, text2, ngrams=1):
     
     returns jaccard distance
     """
-    assert (len(text1) >= ngrams and len(text2) >= ngrams), "text size lesser than ngrams passed"
-    grams1=[tuple(text1[i:i+ngrams]) for i in range(len(text1)-ngrams+1)]
-    grams2=[tuple(text2[i:i+ngrams]) for i in range(len(text2)-ngrams+1)]
+    assert (
+        len(text1) >= ngrams and len(text2) >= ngrams
+    ), "text size lesser than ngrams passed"
+    grams1 = [tuple(text1[i : i + ngrams]) for i in range(len(text1) - ngrams + 1)]
+    grams2 = [tuple(text2[i : i + ngrams]) for i in range(len(text2) - ngrams + 1)]
     x, y = set(grams1), set(grams2)
     n, d = len(x.intersection(y)), len(x.union(y))
     return 1 - (n / d)
