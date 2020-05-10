@@ -121,6 +121,11 @@ def typo(word, probability):
     :param probability: probability of a typo
     returns typofied word
     """
+    
+    if ignore and (" " in word):
+        return word
+
+    assert " " not in word, "given string is not a word"
 
     # convert word to list (string is immutable)
     word = list(word)
