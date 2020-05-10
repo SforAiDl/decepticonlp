@@ -15,7 +15,7 @@ def insert_space(word):
 
     -returns edited word a random space in between
     """
-
+    assert " " not in word, "given string is not a word"
     index = random.randint(0, len(word))  # select random index
     return word[:index] + " " + word[index:]  # insert space
 
@@ -39,6 +39,8 @@ def swap(word):
 
     -returns word with random character swaps
     """
+
+    assert " " not in word, "given string is not a word"
 
     assert (
         len(word) >= 4
@@ -71,6 +73,8 @@ def delete(word):
 
     -returns word with random character deletion
     """
+    assert " " not in word, "given string is not a word"
+
     assert (
         len(word) >= 3
     ), "Word needs to have a minimum length of 3 for a delete operation"
@@ -88,6 +92,8 @@ def visual_similar_chars(word, *arg):
     input : adversarial
     output : a̐d̅v̕e̒ŕŝa̅r̕îál̂
     """
+
+    assert " " not in word, "given string is not a word"
 
     unicode_array = np.array(
         [u"\u0301", u"\u0310", u"\u0305", u"\u0315", u"\u0312", u"\u0302"]
