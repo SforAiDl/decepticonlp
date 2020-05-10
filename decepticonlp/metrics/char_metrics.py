@@ -109,18 +109,18 @@ def euclid(text1, text2, norm=False):
     returns euclidean distance
     """
 
-    vocab=set(text1.split()+text2.split())
-    dic=dict.fromkeys(vocab, 0)
-    for word in text1.split(' '):
-        dic[word]+=1
+    vocab = set(text1.split() + text2.split())
+    dic = dict.fromkeys(vocab, 0)
+    for word in text1.split(" "):
+        dic[word] += 1
     vec_text1 = np.fromiter(dic.values(), dtype=int)
-    dic=dict.fromkeys(vocab, 0)
-    for word in text2.split(' '):
-        dic[word]+=1
+    dic = dict.fromkeys(vocab, 0)
+    for word in text2.split(" "):
+        dic[word] += 1
     vec_text2 = np.fromiter(dic.values(), dtype=int)
-    dist=np.linalg.norm(vec_text1-vec_text2)
-    
+    dist = np.linalg.norm(vec_text1 - vec_text2)
+
     if norm:
-        return dist/np.sqrt(len(vocab))
+        return dist / np.sqrt(len(vocab))
     else:
         return dist
