@@ -60,3 +60,11 @@ def test_perturb_swap_with_character_size_less_than_four():
 def test_perturb_swap_with_whitespace():
     with pytest.raises(AssertionError):
         perturb.swap("is wrong", ignore=False)
+
+def test_perturb_typo_with_whitespace():
+    with pytest.raises(AssertionError):
+        perturb.typo("is wrong", 0.1, ignore=False)
+
+def test_perturb_typo(word, expected_result):
+    random.seed(42)
+    assert perturb.typo(word) == expected_result
