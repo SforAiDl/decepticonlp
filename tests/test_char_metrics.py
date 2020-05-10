@@ -67,3 +67,15 @@ def test_euclid_norm(text1, text2, expected_result):
 def test_jaccard(text1, text2, expected_result):
     err = jaccard(text1, text2) - expected_result
     assert -1e-5 < err < 1e-5
+
+@pytest.mark.parametrize(
+    "text1, text2, window, expected_result",
+    [
+        ("Word", "Wordy", 1, 0.19999999999999996),
+        ("Word", "Wordy", 2, 0.25),
+        ("Word", "Wordy", 3, 0.33333333333333337),
+    ],
+)
+def test_jaccard(text1, text2, window, expected_result):
+    err = jaccard(text1, text2, window) - expected_result
+    assert -1e-5 < err < 1e-5
