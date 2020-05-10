@@ -78,3 +78,49 @@ def jaccard(text1, text2):
     x, y = set(text1), set(text2)
     n, d = len(x.intersection(y)), len(x.union(y))
     return 1 - (n / d)
+
+
+def euclid(text1, text2, norm=False):
+    """
+    the Euclidean distance between strings p and q given,
+    the Euclidean space is exactly the word vector space.
+
+    Example:
+    from perturb import euclid
+    
+    #Norm=False
+    print(euclid("Hey","HEY"))
+    1.4142135623730951
+
+    print(euclid("Hey there I am mahajan","HEY there I mahajan"))
+    1.7320508075688772
+
+    #Norm=True
+    print(euclid("Hey","HEY",norm=True))
+    1.0
+
+    print(euclid("Hey there I am mahajan","HEY there I mahajan", norm=True))
+    0.7071067811865476
+
+    :params
+    :text1, text2 - Both the inputs
+    :norm - True, False : If True, distance is normalized between 0 and 1
+    
+    returns euclidean distance
+    """
+
+    vocab=set(text1.split()+text2.split())
+    dic=dict.fromkeys(vocab, 0)
+    for word in text1.split(' '):
+        dic[word]+=1
+    vec_text1 = np.fromiter(dic.values(), dtype=int)
+    dic=dict.fromkeys(vocab, 0)
+    for word in text2.split(' '):
+        dic[word]+=1
+    vec_text2 = np.fromiter(dic.values(), dtype=int)
+    dist=np.linalg.norm(vec_text1-vec_text2)
+    
+    if norm:
+        return dist/np.sqrt(len(vocab))
+    else:
+        return dist
