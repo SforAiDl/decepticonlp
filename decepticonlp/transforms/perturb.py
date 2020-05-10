@@ -190,6 +190,5 @@ def typo(word, probability):
     return word
 
 
-
 if __name__ == "__main__":
     print(visual_similar_chars("adversarial"))
