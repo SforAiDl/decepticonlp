@@ -99,7 +99,7 @@ def delete(word, ignore=True):
     return word[:index] + word[index + 1 :]  # delete index
 
 
-def typo(word, probability):
+def typo(word, probability, ignore=True):
     """
     shifts a character by one keyboard space:
     one space up, down, left or right
