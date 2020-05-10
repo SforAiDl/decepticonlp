@@ -61,7 +61,7 @@ def levenshtein(text1, text2, normalize="none"):
         return matrix[size_x - 1, size_y - 1]
 
 
-def jaccard(text1, text2, ngrams=1):
+def jaccard(text1, text2, ngrams=1, ignore=True):
     """
     Calculate Jaccard Distance :
     J(X,Y) = |X∩Y| / |X∪Y|
@@ -75,12 +75,17 @@ def jaccard(text1, text2, ngrams=1):
     :text1 : First string to be compared
     :text2 : Second string to be compared
     :ngrams : Select the ngram range
+    :ignore : Boolean to ignore assertions
     :type text1: String
     :type text2: String
     :type ngrams: int
     
     returns jaccard distance
     """
+
+    if ignore and not (len(text1) >= ngrams and len(text2) >= ngrams):
+        return jaccard(text1, text2)
+
     assert (
         len(text1) >= ngrams and len(text2) >= ngrams
     ), "text size lesser than ngrams passed"
