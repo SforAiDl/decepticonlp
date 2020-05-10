@@ -121,7 +121,7 @@ def typo(word, probability):
     :param probability: probability of a typo
     returns typofied word
     """
-    
+
     if ignore and (" " in word):
         return word
 
