@@ -16,7 +16,12 @@ def insert_space(word):
     -returns edited word a random space in between
     """
     assert " " not in word, "given string is not a word"
-    index = random.randint(0, len(word))  # select random index
+
+    assert (
+        len(word) >= 2
+    ), "Word needs to have a minimum length of 2 for a swap operation"
+
+    index = random.randint(1, len(word)-1)  # select random index
     return word[:index] + " " + word[index:]  # insert space
 
 
