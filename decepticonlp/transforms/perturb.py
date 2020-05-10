@@ -31,7 +31,7 @@ def swap(word):
     swap(word)      #Input Hey
     Assertion Error
 
-    #If input's lenght is greater than or equal to 4
+    #If input's length is greater than or equal to 4
     swap(word)      #Input WHAT
     WAHT
     
@@ -42,7 +42,7 @@ def swap(word):
 
     assert (
         len(word) >= 4
-    ), "Word needs to have a minimum length of 4 for a swap operation"
+    ), "Word needs to have a minimum length of 4 characters for a swap operation"
     charlist = list(word)
     index = random.randint(1, len(word) - 3)  # select random offset for tuple
     charlist[index], charlist[index + 1] = (
@@ -73,7 +73,7 @@ def delete(word):
     """
     assert (
         len(word) >= 3
-    ), "Word needs to have a minimum length of 3 for a delete operation"
+    ), "Word needs to have a minimum length of 3 characters for a delete operation"
     index = random.randint(1, len(word) - 2)  # select random index
     return word[:index] + word[index + 1 :]  # delete index
 
