@@ -2,7 +2,7 @@ import numpy as np
 import random
 
 # character level perturbations.
-def insert_space(word):
+def insert_space(word, ignore=True):
     """
     Insert space at a random position in the word
 
@@ -11,10 +11,15 @@ def insert_space(word):
     print(edited_word)
     S omesh
 
-    :param word - word to be edited
+    :param 
+    :word: word to be edited
+    :ignore: default (True), boolean if assertions should be ignored
 
     -returns edited word a random space in between
     """
+    if ignore and (" " in word or len(word)<2):
+        return word
+
     assert " " not in word, "given string is not a word"
 
     assert (
@@ -25,7 +30,7 @@ def insert_space(word):
     return word[:index] + " " + word[index:]  # insert space
 
 
-def swap(word):
+def swap(word, ignore=True):
     """
     Swaps two adjacent characters in a word which are not at the either end
     Implies that the word is at least four characters long
@@ -40,10 +45,13 @@ def swap(word):
     swap(word)      #Input WHAT
     WAHT
     
-    :param word - word to be edited
+    :word: word to be edited
+    :ignore: default (True), boolean if assertions should be ignored
 
     -returns word with random character swaps
     """
+    if ignore and (" " in word or len(word)<4):
+        return word
 
     assert " " not in word, "given string is not a word"
 
@@ -59,7 +67,7 @@ def swap(word):
     return "".join(charlist)
 
 
-def delete(word):
+def delete(word, ignore=True):
     """
     Deletes a random character which is not at the either end
     Implies that the word is at least three characters long
@@ -67,17 +75,21 @@ def delete(word):
     word=input()
 
     #If input's length is less than 3
-    swap(word)      #Input He
+    delete(word)      #Input He
     Assertion Error
 
     #If input's lenght is greater than or equal to 3
-    swap(word)      #Input Hey
+    delete(word)      #Input Hey
     Hy
     
-    :param word - word to be edited
+    :word: word to be edited
+    :ignore: default (True), boolean if assertions should be ignored
 
     -returns word with random character deletion
     """
+    if ignore and (" " in word or len(word)<3):
+        return word
+    
     assert " " not in word, "given string is not a word"
 
     assert (
@@ -87,17 +99,27 @@ def delete(word):
     return word[:index] + word[index + 1 :]  # delete index
 
 
-def visual_similar_chars(word, *arg):
+def visual_similar_chars(word, *arg, ignore=True):
     """
     unicode_array is a list of different unicodes.
     each char of the word is perturbed by a unicode chosen at random
     from the unicode_array.
     
+    :word: word to be edited
+    :ignore: default (True), boolean if assertions should be ignored
+
     eg:
     input : adversarial
     output : a̐d̅v̕e̒ŕŝa̅r̕îál̂
-    """
 
+    visual_similar_chars("Hey Stop")
+    Hey Stop
+
+    visual_similar_chars("Hey Stop", ignore=False)
+    assertion error
+    """
+    if ignore and " " in word:
+        return word
     assert " " not in word, "given string is not a word"
 
     unicode_array = np.array(
