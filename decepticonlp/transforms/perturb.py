@@ -317,3 +317,5 @@ def visual_similar_chars(word, *arg, ignore=True):
 
 if __name__ == "__main__":
     print(visual_similar_chars("adversarial", "unicode", "homoglyph"))
+
+    

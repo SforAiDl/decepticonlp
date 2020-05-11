@@ -95,3 +95,5 @@ def test_perturb_visual_sim_chars_glyph(word,expected_result):
 def test_perturb_visual_sim_chars_uni(word,expected_result):
     np.random.seed(0)
     assert perturb.visual_similar_chars(word,"unicode", "homoglyph")==expected_result
+
+    
