@@ -203,23 +203,12 @@ class TypoCharacterPerturbations(CharacterPerturbations):
 
         assert " " not in word, self.get_string_not_a_word_error_msg()
 
-        # convert word to list (string is immutable)
         word = list(word)
-
-        num_chars_to_shift = math.ceil(len(word) * kwargs.get("probability", 0.1))
-
-        # checking for capitalizations
-        capitalization = [False] * len(word)
-
-        # convert to lowercase and record capitalization
-        for i in range(len(word)):
-            capitalization[i] = word[i].isupper()
-            word[i] = word[i].lower()
+        chars = len(word)
+        num_chars_to_shift = math.ceil(chars * kwargs.get("probability", 0.1))
 
         # list of characters to be switched
-        positions_to_shift = []
-        for i in range(num_chars_to_shift):
-            positions_to_shift.append(random.randint(0, len(word) - 1))
+        positions_to_shift = random.sample(range(chars), num_chars_to_shift)
 
         # defining a dictionary of keys located close to each character
         keys_in_proximity = {
@@ -251,23 +240,19 @@ class TypoCharacterPerturbations(CharacterPerturbations):
             "z": ["a", "s", "x"],
         }
 
-        # insert typo
-        for pos in positions_to_shift:
-            # no typo insertion for special characters
-            try:
-                typo_list = keys_in_proximity[word[pos]]
-                word[pos] = random.choice(typo_list)
-            except:
-                break
+        for i, c in enumerate(word):
+            # Check Upper
+            cap = c.isupper()
 
-        # reinsert capitalization
-        for i in range(len(word)):
-            if capitalization[i]:
-                word[i] = word[i].upper()
+            # Check if in position and given keys
+            if i in positions_to_shift and c in keys_in_proximity:
+                word[i] = random.choice(keys_in_proximity[c])
+                if cap:
+                    # convert to upper if in upper
+                    word[i] = word[i].upper()
 
         # recombine
         word = "".join(word)
-
         return word
 
 
