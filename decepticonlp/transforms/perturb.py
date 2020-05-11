@@ -1,7 +1,7 @@
 import numpy as np
 import random
 import math
-
+from homoglyph_dic import glyph
 # character level perturbations.
 def insert_space(word, ignore=True):
     """
@@ -216,8 +216,13 @@ def visual_similar_chars(word, *arg, ignore=True):
     :ignore: default (True), boolean if assertions should be ignored
 
     eg:
+    If the unicode method is chosen:
     input : adversarial
     output : a̐d̅v̕e̒ŕŝa̅r̕îál̂
+
+    If the homoglyph method is chosen:
+    input : adversarial
+    output : @d𑣀𝓮𝓻ꮪ𝕒г𝜾а1
 
     visual_similar_chars("Hey Stop")
     Hey Stop
@@ -232,16 +237,25 @@ def visual_similar_chars(word, *arg, ignore=True):
     unicode_array = np.array(
         [u"\u0301", u"\u0310", u"\u0305", u"\u0315", u"\u0312", u"\u0302"]
     )
+    assert len(arg)==2,"enter 2 methods to choose from."
+    
+    method_pick=np.random.choice(len(arg),1)[0]
+    
+    if arg[method_pick]=='unicode':
+        char_array = np.array(list(word))
 
-    char_array = np.array(list(word))
+        int_pick = np.random.randint(0, high=unicode_array.shape[0], size=len(word))
 
-    int_pick = np.random.randint(0, high=unicode_array.shape[0], size=len(word))
+        picked_unicode = unicode_array[int_pick]
 
-    picked_unicode = unicode_array[int_pick]
-
-    perturbed_array = np.char.add(char_array, picked_unicode)
-    return "".join(perturbed_array)
+        perturbed_array = np.char.add(char_array, picked_unicode)
+        return "".join(perturbed_array)
+    elif arg[method_pick]=='homoglyph':
+        char_list=list(word)
+        homoglyph_char_list=[glyph(char) for char in char_list]
+        return "".join(homoglyph_char_list)
+        
 
 
 if __name__ == "__main__":
-    print(visual_similar_chars("adversarial"))
+    print(visual_similar_chars("Adversarial",'unicode','homoglyph'))
