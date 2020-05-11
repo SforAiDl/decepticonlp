@@ -31,25 +31,30 @@ def insert_space(word, ignore=True):
     return word[:index] + " " + word[index:]  # insert space
 
 
-def swap(word, ignore=True):
+def shuffle(word, mid=True, ignore=True):
     """
-    Swaps two adjacent characters in a word which are not at the either end
-    Implies that the word is at least four characters long
-
-    word=input()
-
-    #If input's length is less than 4
-    swap(word)      #Input Hey
-    Assertion Error
-
-    #If input's length is greater than or equal to 4
-    swap(word)      #Input WHAT
+    if mid=True:
+    shuffles the characters of a word at random, barring the initial and last character
+    else:
+    swaps any two characters of a word at random, barring the initial and last character
+    
+    
+    word = "Adversarial"
+    print(shuffle('Adversarial',mid=True))
+    Aaidsvrreal
+    
+    word = "WHAT"
+    print(shuffle('WHAT',mid=False))
     WAHT
     
-    :word: word to be edited
-    :ignore: default (True), boolean if assertions should be ignored
-
-    -returns word with random character swaps
+    :param word : word to be shuffled
+    :param mid : 
+    if set, it shuffle all the characters barring the initial and last
+    if not set, it swap any two characters barring the initial and last 
+                
+    
+    returns shuffled word with first and last character intact
+    
     """
     if ignore and (" " in word or len(word) < 4):
         return word
@@ -58,14 +63,24 @@ def swap(word, ignore=True):
 
     assert (
         len(word) >= 4
-    ), "Word needs to have a minimum length of 4 characters for a swap operation"
-    charlist = list(word)
-    index = random.randint(1, len(word) - 3)  # select random offset for tuple
-    charlist[index], charlist[index + 1] = (
-        charlist[index + 1],
-        charlist[index],
-    )  # swap tuple
-    return "".join(charlist)
+    ), "Word needs to have a minimum length of 4 for a shuffle operation"
+
+    if mid:
+        # Split word into first & last letter, and middle letters
+        first, mid, last = word[0], word[1:-1], word[-1]
+
+        mid = list(mid)
+        random.shuffle(mid)
+
+        return first + "".join(mid) + last
+    elif mid == False:
+        charlist = list(word)
+        index = random.randint(1, len(word) - 3)  # select random offset for tuple
+        charlist[index], charlist[index + 1] = (
+            charlist[index + 1],
+            charlist[index],
+        )  # swap tuple
+        return "".join(charlist)
 
 
 def delete(word, ignore=True):
