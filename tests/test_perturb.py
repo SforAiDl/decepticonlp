@@ -52,7 +52,7 @@ def test_perturb_shuffle_swap_two(word, expected_result):
 
 
 @pytest.mark.parametrize(
-    "word, expected_result", [("Adversarial", "Aiavrsedarl"),],
+    "word, expected_result", [("Adversarial", "Aiavrsedarl"), ("dog", "dog"),],
 )
 def test_perturb_shuffle_middle(word, expected_result):
     random.seed(0)
