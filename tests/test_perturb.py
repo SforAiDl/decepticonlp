@@ -44,7 +44,7 @@ def test_perturb_insert_space_with_character_size_less_than_two():
 
 
 @pytest.mark.parametrize(
-    "word, expected_result", [("Adversarial", "Adversairal"),],
+    "word, expected_result", [("THAT", "TAHT"),],
 )
 def test_perturb_shuffle(word, expected_result):
     random.seed(0)
