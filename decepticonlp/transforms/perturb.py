@@ -1,5 +1,6 @@
 import numpy as np
 import random
+import math
 
 # character level perturbations.
 def insert_space(word, ignore=True):
