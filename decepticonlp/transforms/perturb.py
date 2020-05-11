@@ -73,7 +73,7 @@ def shuffle(word, mid=True, ignore=True):
         random.shuffle(mid)
 
         return first + "".join(mid) + last
-    elif mid==False:
+    elif mid == False:
         charlist = list(word)
         index = random.randint(1, len(word) - 3)  # select random offset for tuple
         charlist[index], charlist[index + 1] = (
