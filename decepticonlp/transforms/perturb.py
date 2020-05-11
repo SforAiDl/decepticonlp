@@ -220,7 +220,7 @@ def visual_similar_chars(word, *arg, ignore=True):
     input : adversarial
     output : a̐d̅v̕e̒ŕŝa̅r̕îál̂
 
-    If the homoglyph method is chosen:
+    If homoglyph method is chosen:
     input : adversarial
     output : @d𑣀𝓮𝓻ꮪ𝕒г𝜾а1
 

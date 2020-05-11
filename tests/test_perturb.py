@@ -6,7 +6,7 @@ import pytest
 
 from decepticonlp.transforms import perturb
 
-import numpy
+import numpy as np
 
 @pytest.mark.parametrize(
     "word, expected_result", [("Bob", "Bb"), ("Hey there", "Hey there"), ("H", "H"),],
