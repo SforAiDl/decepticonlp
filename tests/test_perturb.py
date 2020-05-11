@@ -65,11 +65,11 @@ def test_perturb_swap_with_whitespace():
 @pytest.mark.parametrize(
     "word, expected_result", [("Noise", "Noixe"),],
 )
-def test_perturb_typo_with_whitespace():
-    with pytest.raises(AssertionError):
-        perturb.typo("is wrong", 0.1, ignore=False)
-
-
 def test_perturb_typo(word, expected_result):
     random.seed(0)
     assert perturb.typo(word) == expected_result
+
+
+def test_perturb_typo_with_whitespace():
+    with pytest.raises(AssertionError):
+        perturb.typo("is wrong", 0.1, ignore=False)
