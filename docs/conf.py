@@ -50,7 +50,7 @@ master_doc = "index"
 project = "decepticonlp"
 copyright = "2020, Rajaswa Ravindra Patil"
 author = "Rajaswa Ravindra Patil"
-
+name = "decepticonlp Documentation"
 # The version info for the project you're documenting, acts as replacement
 # for |version| and |release|, also used in various other places throughout
 # the built documents.
@@ -125,13 +125,7 @@ latex_elements = {
 # (source start file, target name, title, author, documentclass
 # [howto, manual, or own class]).
 latex_documents = [
-    (
-        master_doc,
-        "decepticonlp.tex",
-        "decepticonlp Documentation",
-        "Rajaswa Ravindra Patil",
-        "manual",
-    ),
+    (master_doc, "decepticonlp.tex", name, "Rajaswa Ravindra Patil", "manual",),
 ]
 
 
@@ -139,7 +133,7 @@ latex_documents = [
 
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
-man_pages = [(master_doc, "decepticonlp", "decepticonlp Documentation", [author], 1)]
+man_pages = [(master_doc, "decepticonlp", name, [author], 1)]
 
 
 # -- Options for Texinfo output ----------------------------------------
@@ -151,7 +145,7 @@ texinfo_documents = [
     (
         master_doc,
         "decepticonlp",
-        "decepticonlp Documentation",
+        name,
         author,
         "decepticonlp",
         "One line description of project.",
