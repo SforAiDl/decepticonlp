@@ -44,22 +44,29 @@ def test_perturb_insert_space_with_character_size_less_than_two():
 
 
 @pytest.mark.parametrize(
-    "word, expected_result",
-    [("EXTRA", "ETXRA"), ("Hey there", "Hey there"), ("H", "H"),],
+    "word, expected_result", [("Adversarial", "Adversairal"),],
 )
-def test_perturb_swap(word, expected_result):
-    random.seed(42)
-    assert perturb.swap(word) == expected_result
+def test_perturb_shuffle(word, expected_result):
+    random.seed(0)
+    assert perturb.shuffle(word, mid=False) == expected_result
 
 
-def test_perturb_swap_with_character_size_less_than_four():
+@pytest.mark.parametrize(
+    "word, expected_result", [("Adversarial", "Aiavrsedarl"),],
+)
+def test_perturb_shuffle(word, expected_result):
+    random.seed(0)
+    assert perturb.shuffle(word) == expected_result
+
+
+def test_perturb_shuffle_with_character_size_less_than_four():
     with pytest.raises(AssertionError):
-        perturb.swap("Ton", ignore=False)
+        perturb.shuffle("Ton", ignore=False)
 
 
-def test_perturb_swap_with_whitespace():
+def test_perturb_shuffle_with_whitespace():
     with pytest.raises(AssertionError):
-        perturb.swap("is wrong", ignore=False)
+        perturb.shuffle("is wrong", ignore=False)
 
 
 @pytest.mark.parametrize(
