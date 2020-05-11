@@ -6,7 +6,7 @@ import pytest
 
 from decepticonlp.transforms import perturb
 
-import np
+import numpy
 
 @pytest.mark.parametrize(
     "word, expected_result", [("Bob", "Bb"), ("Hey there", "Hey there"), ("H", "H"),],
@@ -96,4 +96,3 @@ def test_perturb_visual_sim_chars_uni(word,expected_result):
     np.random.seed(0)
     assert perturb.visual_similar_chars(word,"unicode", "homoglyph")==expected_result
 
-    

@@ -314,8 +314,7 @@ def visual_similar_chars(word, *arg, ignore=True):
                 homoglyph_char_list.append(char)
         return "".join(homoglyph_char_list)
 
-
 if __name__ == "__main__":
     print(visual_similar_chars("adversarial", "unicode", "homoglyph"))
 
-    
+
