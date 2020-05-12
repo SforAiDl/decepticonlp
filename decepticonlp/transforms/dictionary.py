@@ -1,7 +1,7 @@
 import numpy as np
 
 
-class glyph_dictionary():
+class glyph_dictionary:
     """
     Class which contains homoglyph dictionary
 
@@ -9,6 +9,7 @@ class glyph_dictionary():
 
     a character at random from the string
     """
+
     def __init__(self):
         self.d = {
             "a": "@aɑαа⍺ａ𝐚𝑎𝒂𝒶𝓪𝔞𝕒𝖆𝖺𝗮𝘢𝙖𝚊𝛂𝛼𝜶𝝰𝞪",
@@ -77,5 +78,5 @@ class glyph_dictionary():
             glyph_pick = np.random.choice(len(glyph_string), 1)[0]
             return glyph_string[glyph_pick]
         except KeyError:
-            print('{} not in dictionary key. Can\'t get homoglyph'.format(char))
+            print("{} not in dictionary key. Can't get homoglyph".format(char))
             return char
