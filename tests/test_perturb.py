@@ -35,26 +35,26 @@ def test_perturb_delete_with_whitespace():
 )
 def test_perturb_insert_space(word, expected_result):
     random.seed(42)
-    space_perturb = perturbations.SpaceCharacterPerturbations()
+    space_perturb = perturbations.InsertSpaceCharacterPerturbations()
     assert space_perturb.apply(word) == expected_result
 
 
 def test_perturb_insert_space_with_whitespace():
-    space_perturb = perturbations.SpaceCharacterPerturbations()
+    space_perturb = perturbations.InsertSpaceCharacterPerturbations()
     with pytest.raises(AssertionError):
         space_perturb.apply(WHITE_SPACE_EXAMPLE, ignore=False)
 
 
 def test_perturb_insert_space_with_character_size_less_than_two():
-    space_perturb = perturbations.SpaceCharacterPerturbations()
+    space_perturb = perturbations.InsertSpaceCharacterPerturbations()
     with pytest.raises(AssertionError):
         space_perturb.apply("H", ignore=False)
 
 
-@pytest.mark.parametrize("word, expected_result", [("hello", "hellzo")])
+@pytest.mark.parametrize("word, expected_result", [("hello", "hellzo"), ("Hey there", "Hey there"), ("H", "H")])
 def test_perturb_insert_character(word, expected_result):
     random.seed(30)
-    char_perturb = perturbations.SpaceCharacterPerturbations()
+    char_perturb = perturbations.InsertSpaceCharacterPerturbations()
     assert char_perturb.apply(word, char_perturb=True) == expected_result
 
 
