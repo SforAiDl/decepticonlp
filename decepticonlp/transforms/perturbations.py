@@ -1,7 +1,7 @@
 import abc
 import math
 import random
-
+import json
 import numpy as np
 
 
@@ -211,45 +211,14 @@ class TypoCharacterPerturbations(CharacterPerturbations):
         positions_to_shift = random.sample(range(chars), num_chars_to_shift)
 
         # defining a dictionary of keys located close to each character
-        keys_in_proximity = {
-            "a": ["q", "w", "s", "x", "z"],
-            "b": ["v", "g", "h", "n"],
-            "c": ["x", "d", "f", "v"],
-            "d": ["s", "e", "r", "f", "c", "x"],
-            "e": ["w", "s", "d", "r"],
-            "f": ["d", "r", "t", "g", "v", "c"],
-            "g": ["f", "t", "y", "h", "b", "v"],
-            "h": ["g", "y", "u", "j", "n", "b"],
-            "i": ["u", "j", "k", "o"],
-            "j": ["h", "u", "i", "k", "n", "m"],
-            "k": ["j", "i", "o", "l", "m"],
-            "l": ["k", "o", "p"],
-            "m": ["n", "j", "k", "l"],
-            "n": ["b", "h", "j", "m"],
-            "o": ["i", "k", "l", "p"],
-            "p": ["o", "l"],
-            "q": ["w", "a", "s"],
-            "r": ["e", "d", "f", "t"],
-            "s": ["w", "e", "d", "x", "z", "a"],
-            "t": ["r", "f", "g", "y"],
-            "u": ["y", "h", "j", "i"],
-            "v": ["c", "f", "g", "v", "b"],
-            "w": ["q", "a", "s", "e"],
-            "x": ["z", "s", "d", "c"],
-            "y": ["t", "g", "h", "u"],
-            "z": ["a", "s", "x"],
-        }
+        keys_in_proximity = json.load(open("keys_in_proximity.json",'r'))
 
         for i, c in enumerate(word):
             # Check Upper
-            cap = c.isupper()
 
             # Check if in position and given keys
             if i in positions_to_shift and c in keys_in_proximity:
                 word[i] = random.choice(keys_in_proximity[c])
-                if cap:
-                    # convert to upper if in upper
-                    word[i] = word[i].upper()
 
         # recombine
         word = "".join(word)
