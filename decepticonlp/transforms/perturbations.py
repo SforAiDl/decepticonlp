@@ -1,11 +1,8 @@
 import abc
 import math
 import random
-<<<<<<< HEAD
 import json
-=======
 import string
->>>>>>> e3c6dded58d14761230a884aebc469806f592b50
 import numpy as np
 
 
@@ -227,7 +224,7 @@ class TypoCharacterPerturbations(CharacterPerturbations):
         positions_to_shift = random.sample(range(chars), num_chars_to_shift)
 
         # defining a dictionary of keys located close to each character
-        keys_in_proximity = json.load(open("keys_in_proximity.json",'r'))
+        keys_in_proximity = json.load(open("keys_in_proximity.json", "r"))
 
         for i, c in enumerate(word):
             # Check Upper
