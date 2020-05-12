@@ -8,6 +8,8 @@ from decepticonlp.transforms import perturbations
 
 WHITE_SPACE_EXAMPLE = "is wrong"
 
+import numpy as np
+
 
 @pytest.mark.parametrize(
     "word, expected_result", [("Bob", "Bb"), ("Hey there", "Hey there"), ("H", "H"),],
@@ -94,3 +96,22 @@ def test_perturb_typo_with_whitespace():
     type_perturbations = perturbations.TypoCharacterPerturbations()
     with pytest.raises(AssertionError):
         type_perturbations.apply(WHITE_SPACE_EXAMPLE, probability=0.1, ignore=False)
+
+
+@pytest.mark.parametrize(
+    "word, expected_result", [("adversarial", "𝔞𝖉𝘃eⲅꜱ𝐚𝑟𑣃𝛼1"), ("Hi there", "Hi there")],
+)
+def test_homoglyph(word, expected_result):
+    np.random.seed(0)
+    viz = perturbations.VisuallySimilarCharacterPerturbations()
+    assert viz.apply_homoglyph(word) == expected_result
+
+
+@pytest.mark.parametrize(
+    "word, expected_result",
+    [("adversarial", "a̒d̂v́e̕r̕s̕a̐r̕îa̅l̒"), ("Hi there", "Hi there")],
+)
+def test_homoglyph(word, expected_result):
+    np.random.seed(0)
+    viz = perturbations.VisuallySimilarCharacterPerturbations()
+    assert viz.apply(word) == expected_result
