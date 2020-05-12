@@ -1,8 +1,10 @@
 import abc
 import math
 import random
+import json
 import string
 import numpy as np
+from pathlib import Path
 
 
 class CharacterPerturbations(metaclass=abc.ABCMeta):
@@ -215,71 +217,26 @@ class TypoCharacterPerturbations(CharacterPerturbations):
 
         assert " " not in word, self.get_string_not_a_word_error_msg()
 
-        # convert word to list (string is immutable)
         word = list(word)
-
-        num_chars_to_shift = math.ceil(len(word) * kwargs.get("probability", 0.1))
-
-        # checking for capitalizations
-        capitalization = [False] * len(word)
-
-        # convert to lowercase and record capitalization
-        for i in range(len(word)):
-            capitalization[i] = word[i].isupper()
-            word[i] = word[i].lower()
+        chars = len(word)
+        num_chars_to_shift = math.ceil(chars * kwargs.get("probability", 0.1))
 
         # list of characters to be switched
-        positions_to_shift = []
-        for i in range(num_chars_to_shift):
-            positions_to_shift.append(random.randint(0, len(word) - 1))
+        positions_to_shift = random.sample(range(chars), num_chars_to_shift)
 
         # defining a dictionary of keys located close to each character
-        keys_in_proximity = {
-            "a": ["q", "w", "s", "x", "z"],
-            "b": ["v", "g", "h", "n"],
-            "c": ["x", "d", "f", "v"],
-            "d": ["s", "e", "r", "f", "c", "x"],
-            "e": ["w", "s", "d", "r"],
-            "f": ["d", "r", "t", "g", "v", "c"],
-            "g": ["f", "t", "y", "h", "b", "v"],
-            "h": ["g", "y", "u", "j", "n", "b"],
-            "i": ["u", "j", "k", "o"],
-            "j": ["h", "u", "i", "k", "n", "m"],
-            "k": ["j", "i", "o", "l", "m"],
-            "l": ["k", "o", "p"],
-            "m": ["n", "j", "k", "l"],
-            "n": ["b", "h", "j", "m"],
-            "o": ["i", "k", "l", "p"],
-            "p": ["o", "l"],
-            "q": ["w", "a", "s"],
-            "r": ["e", "d", "f", "t"],
-            "s": ["w", "e", "d", "x", "z", "a"],
-            "t": ["r", "f", "g", "y"],
-            "u": ["y", "h", "j", "i"],
-            "v": ["c", "f", "g", "v", "b"],
-            "w": ["q", "a", "s", "e"],
-            "x": ["z", "s", "d", "c"],
-            "y": ["t", "g", "h", "u"],
-            "z": ["a", "s", "x"],
-        }
+        json_path = Path("decepticonlp/transforms/keys_in_proximity.json")
+        keys_in_proximity = json.load(open(json_path, "r"))
 
-        # insert typo
-        for pos in positions_to_shift:
-            # no typo insertion for special characters
-            try:
-                typo_list = keys_in_proximity[word[pos]]
-                word[pos] = random.choice(typo_list)
-            except:
-                break
+        for i, c in enumerate(word):
+            # Check Upper
 
-        # reinsert capitalization
-        for i in range(len(word)):
-            if capitalization[i]:
-                word[i] = word[i].upper()
+            # Check if in position and given keys
+            if i in positions_to_shift and c in keys_in_proximity:
+                word[i] = random.choice(keys_in_proximity[c])
 
         # recombine
         word = "".join(word)
-
         return word
 
 
