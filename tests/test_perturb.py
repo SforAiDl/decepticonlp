@@ -4,7 +4,9 @@ import random
 
 import pytest
 
-from decepticonlp.transforms import perturb
+from decepticonlp.transforms import perturbations
+
+WHITE_SPACE_EXAMPLE = "is wrong"
 
 
 @pytest.mark.parametrize(
@@ -12,17 +14,20 @@ from decepticonlp.transforms import perturb
 )
 def test_perturb_delete(word, expected_result):
     random.seed(42)
-    assert perturb.delete(word) == expected_result
+    delete_perturbations = perturbations.DeleteCharacterPerturbations()
+    assert delete_perturbations.apply(word) == expected_result
 
 
 def test_perturb_delete_with_character_size_less_than_three():
+    delete_perturbations = perturbations.DeleteCharacterPerturbations()
     with pytest.raises(AssertionError):
-        perturb.delete("To", ignore=False)
+        delete_perturbations.apply("To", ignore=False)
 
 
 def test_perturb_delete_with_whitespace():
+    delete_perturbations = perturbations.DeleteCharacterPerturbations()
     with pytest.raises(AssertionError):
-        perturb.delete("is wrong", ignore=False)
+        delete_perturbations.apply(WHITE_SPACE_EXAMPLE, ignore=False)
 
 
 @pytest.mark.parametrize(
@@ -30,17 +35,20 @@ def test_perturb_delete_with_whitespace():
 )
 def test_perturb_insert_space(word, expected_result):
     random.seed(42)
-    assert perturb.insert_space(word) == expected_result
+    space_perturb = perturbations.SpaceCharacterPerturbations()
+    assert space_perturb.apply(word) == expected_result
 
 
 def test_perturb_insert_space_with_whitespace():
+    space_perturb = perturbations.SpaceCharacterPerturbations()
     with pytest.raises(AssertionError):
-        perturb.insert_space("is wrong", ignore=False)
+        space_perturb.apply(WHITE_SPACE_EXAMPLE, ignore=False)
 
 
 def test_perturb_insert_space_with_character_size_less_than_two():
+    space_perturb = perturbations.SpaceCharacterPerturbations()
     with pytest.raises(AssertionError):
-        perturb.insert_space("H", ignore=False)
+        space_perturb.apply("H", ignore=False)
 
 
 @pytest.mark.parametrize(
@@ -48,7 +56,8 @@ def test_perturb_insert_space_with_character_size_less_than_two():
 )
 def test_perturb_shuffle_swap_two(word, expected_result):
     random.seed(0)
-    assert perturb.shuffle(word, mid=False) == expected_result
+    shuffle_perturbations = perturbations.ShuffleCharacterPerturbations()
+    assert shuffle_perturbations.apply(word, mid=False) == expected_result
 
 
 @pytest.mark.parametrize(
@@ -56,27 +65,32 @@ def test_perturb_shuffle_swap_two(word, expected_result):
 )
 def test_perturb_shuffle_middle(word, expected_result):
     random.seed(0)
-    assert perturb.shuffle(word) == expected_result
+    shuffle_perturbations = perturbations.ShuffleCharacterPerturbations()
+    assert shuffle_perturbations.apply(word) == expected_result
 
 
 def test_perturb_shuffle_with_character_size_less_than_four():
+    shuffle_perturbations = perturbations.ShuffleCharacterPerturbations()
     with pytest.raises(AssertionError):
-        perturb.shuffle("Ton", ignore=False)
+        shuffle_perturbations.apply("Ton", ignore=False)
 
 
 def test_perturb_shuffle_with_whitespace():
+    shuffle_perturbations = perturbations.ShuffleCharacterPerturbations()
     with pytest.raises(AssertionError):
-        perturb.shuffle("is wrong", ignore=False)
+        shuffle_perturbations.apply(WHITE_SPACE_EXAMPLE, ignore=False)
 
 
 @pytest.mark.parametrize(
-    "word, expected_result", [("Noise", "Noixe"),],
+    "word, expected_result", [("Noise", "Noixe"), ("Hi there", "Hi there")],
 )
 def test_perturb_typo(word, expected_result):
     random.seed(0)
-    assert perturb.typo(word) == expected_result
+    type_perturbations = perturbations.TypoCharacterPerturbations()
+    assert type_perturbations.apply(word) == expected_result
 
 
 def test_perturb_typo_with_whitespace():
+    type_perturbations = perturbations.TypoCharacterPerturbations()
     with pytest.raises(AssertionError):
-        perturb.typo("is wrong", 0.1, ignore=False)
+        type_perturbations.apply(WHITE_SPACE_EXAMPLE, probability=0.1, ignore=False)

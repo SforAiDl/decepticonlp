@@ -11,4 +11,6 @@ Development Lead
 Contributors
 ------------
 
-None yet. Why not be the first?
+* Rohit Patil <rohts.patil@gmail.com>
+* Parantak Singh <parantak.singh@gmail.com>
+
