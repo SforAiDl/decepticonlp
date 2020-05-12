@@ -35,7 +35,7 @@ class SpaceCharacterPerturbations(CharacterPerturbations):
             - applies the space perturbation on the word and returns it.
     """
 
-    def apply(self, word: str, char_perturb = False, **kwargs):
+    def apply(self, word: str, char_perturb=False, **kwargs):
         """
             Insert space or character at a random position in the word
 
@@ -69,7 +69,9 @@ class SpaceCharacterPerturbations(CharacterPerturbations):
 
         if char_perturb == True:
             index = random.randint(0, len(word))  # select random index
-            return word[:index] + random.choice(string.ascii_letters[:26]) + word[index:]  # insert character
+            return (
+                word[:index] + random.choice(string.ascii_letters[:26]) + word[index:]
+            )  # insert character
         else:
             index = random.randint(1, len(word) - 1)  # select random index
             return word[:index] + " " + word[index:]  # insert space
