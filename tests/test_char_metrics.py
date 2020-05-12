@@ -6,7 +6,7 @@ from decepticonlp.metrics.char_metrics import *
 
 @pytest.mark.parametrize(
     "text1, text2, expected_result",
-    [("Word", "Wordy", 1), ("Word", "Wrod", 2), ("H", "H", 0),],
+    [("Word", "Wordy", 1), ("Word", "Wrod", 2), ("H", "H", 0)],
 )
 def test_levenshtein(text1, text2, expected_result):
     assert levenshtein(text1, text2) == expected_result
@@ -14,7 +14,7 @@ def test_levenshtein(text1, text2, expected_result):
 
 @pytest.mark.parametrize(
     "text1, text2, expected_result",
-    [("Word", "Wordy", 0.1111111111111111), ("Word", "Wrod", 0.25), ("H", "H", 0),],
+    [("Word", "Wordy", 0.1111111111111111), ("Word", "Wrod", 0.25), ("H", "H", 0)],
 )
 def test_levenshtein_sum(text1, text2, expected_result):
     err = levenshtein(text1, text2, "sum") - expected_result
@@ -23,7 +23,7 @@ def test_levenshtein_sum(text1, text2, expected_result):
 
 @pytest.mark.parametrize(
     "text1, text2, expected_result",
-    [("Word", "Wordy", 0.2), ("Word", "Wrod", 0.5), ("H", "H", 0),],
+    [("Word", "Wordy", 0.2), ("Word", "Wrod", 0.5), ("H", "H", 0)],
 )
 def test_levenshtein_lcs(text1, text2, expected_result):
     err = levenshtein(text1, text2, "lcs") - expected_result
