@@ -26,7 +26,7 @@ class CharacterPerturbations(metaclass=abc.ABCMeta):
         return "given string is not a word"
 
 
-class SpaceCharacterPerturbations(CharacterPerturbations):
+class InsertSpaceCharacterPerturbations(CharacterPerturbations):
     """
         A class used to apply space character perturbations.
         Methods
@@ -65,7 +65,7 @@ class SpaceCharacterPerturbations(CharacterPerturbations):
 
         assert (
             len(word) >= 2
-        ), "Word needs to have a minimum length of 2 for a swap operation"
+        ), "Word needs to have a minimum length of 2 for an insert operation"
 
         if char_perturb == True:
             index = random.randint(0, len(word))  # select random index
