@@ -6,6 +6,8 @@ import pytest
 
 from decepticonlp.transforms import perturbations
 
+WHITE_SPACE_EXAMPLE = "is wrong"
+
 
 @pytest.mark.parametrize(
     "word, expected_result", [("Bob", "Bb"), ("Hey there", "Hey there"), ("H", "H"),],
@@ -25,7 +27,7 @@ def test_perturb_delete_with_character_size_less_than_three():
 def test_perturb_delete_with_whitespace():
     delete_perturbations = perturbations.DeleteCharacterPerturbations()
     with pytest.raises(AssertionError):
-        delete_perturbations.apply("is wrong", ignore=False)
+        delete_perturbations.apply(WHITE_SPACE_EXAMPLE, ignore=False)
 
 
 @pytest.mark.parametrize(
@@ -40,7 +42,7 @@ def test_perturb_insert_space(word, expected_result):
 def test_perturb_insert_space_with_whitespace():
     space_perturb = perturbations.SpaceCharacterPerturbations()
     with pytest.raises(AssertionError):
-        space_perturb.apply("is wrong", ignore=False)
+        space_perturb.apply(WHITE_SPACE_EXAMPLE, ignore=False)
 
 
 def test_perturb_insert_space_with_character_size_less_than_two():
@@ -83,7 +85,7 @@ def test_perturb_shuffle_with_character_size_less_than_four():
 def test_perturb_shuffle_with_whitespace():
     shuffle_perturbations = perturbations.ShuffleCharacterPerturbations()
     with pytest.raises(AssertionError):
-        shuffle_perturbations.apply("is wrong", ignore=False)
+        shuffle_perturbations.apply(WHITE_SPACE_EXAMPLE, ignore=False)
 
 
 @pytest.mark.parametrize(
@@ -98,4 +100,4 @@ def test_perturb_typo(word, expected_result):
 def test_perturb_typo_with_whitespace():
     type_perturbations = perturbations.TypoCharacterPerturbations()
     with pytest.raises(AssertionError):
-        type_perturbations.apply("is wrong", probability=0.1, ignore=False)
+        type_perturbations.apply(WHITE_SPACE_EXAMPLE, probability=0.1, ignore=False)
