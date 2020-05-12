@@ -310,9 +310,7 @@ class VisuallySimilarCharacterPerturbations(CharacterPerturbations):
 
         char_array = np.array(list(word))
 
-        int_pick = np.random.choice(unicode_array.shape[0], len(word))
-
-        picked_unicode = unicode_array[int_pick]
+        picked_unicode = np.random.choice(unicode_array,len(word))
 
         perturbed_array = np.char.add(char_array, picked_unicode)
         return "".join(perturbed_array)
@@ -349,4 +347,4 @@ class VisuallySimilarCharacterPerturbations(CharacterPerturbations):
 
 if __name__ == "__main__":
     viz = VisuallySimilarCharacterPerturbations()
-    print(viz.apply_homoglyph("adversarial"))
+    print(viz.apply("adversarial"))
