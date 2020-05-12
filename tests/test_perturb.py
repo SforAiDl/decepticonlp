@@ -51,7 +51,10 @@ def test_perturb_insert_space_with_character_size_less_than_two():
         space_perturb.apply("H", ignore=False)
 
 
-@pytest.mark.parametrize("word, expected_result", [("hello", "hellzo"), ("Hey there", "Hey there"), ("H", "H")])
+@pytest.mark.parametrize(
+    "word, expected_result",
+    [("hello", "hellzo"), ("Hey there", "Hey there"), ("H", "H")],
+)
 def test_perturb_insert_character(word, expected_result):
     random.seed(30)
     char_perturb = perturbations.InsertSpaceCharacterPerturbations()
