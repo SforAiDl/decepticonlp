@@ -73,25 +73,40 @@ class ContractParaphrases(Paraphrases):
                 return text
 
             assert "'" in text, self.get_not_a_contraction_error_message()
-            text = re.sub(r"\blet's\b", "let us", text, flags=re.IGNORECASE)
-            text = re.sub(r"\bwon't\b", "will not", text, flags=re.IGNORECASE)
-            text = re.sub(r"n't", " not", text, flags=re.IGNORECASE)
-            text = re.sub(r"'ve", " have", text, flags=re.IGNORECASE)
-            text = re.sub(r"'m", " am", text, flags=re.IGNORECASE)
+
+            contraction_expansion_list=[
+                                        (r"\blet's\b", "let us"),
+                                        (r"\bwon't\b", "will not"),
+                                        (r"n't", " not"),
+                                        (r"'ve", " have"),
+                                        (r"'m", " am"),
+
+            ]
+
+            #Iterate over the pairs of the list
+            for pair in contraction_expansion_list:
+                text=re.sub(pair[0],pair[1],text,flags=re.IGNORECASE)
+
 
             # For contractions with multiple choices, choose the expansion arbitrarily
-            list_for_s = [r" is", r" has"]
-            list_for_d = [r" had", r" would"]
-            list_for_ll = [r" will", r" shall"]
-            list_for_re = [r" are", r" were"]
+            contraction_expansion_list_multiple=[
+                                                 (r"'s", [r" is", r" has"]),
+                                                 (r"'d", [r" had", r" would"]),
+                                                 (r"'ll", [r" will", r" shall"]),
+                                                 (r"'re", [r" are", r" were"])
+
+
+            ]
+            
 
             choice = random.randint(0, 1)
-            text = re.sub(r"'s", list_for_s[choice], text, flags=re.IGNORECASE)
-            text = re.sub(r"'d", list_for_d[choice], text, flags=re.IGNORECASE)
-            text = re.sub(r"'ll", list_for_ll[choice], text, flags=re.IGNORECASE)
-            text = re.sub(r"'re", list_for_re[choice], text, flags=re.IGNORECASE)
+
+            #Iterate over the pairs of the list
+            for pair in contraction_expansion_list_multiple:
+                text=re.sub(pair[0],pair[1][choice], text, flags=re.IGNORECASE)
             return text
 
+        
         if (
             kwargs.get("ignore", self.get_ignore_default_value())
             and len(text.split(" ")) < 2
@@ -101,26 +116,24 @@ class ContractParaphrases(Paraphrases):
         assert not len(text.split()) < 2, self.get_length_less_than_two_error_message()
 
         # Define text:contraction dictionary
-        text_to_contraction = {
-            r"\blet us\b": r"let's",
-            r" not": r"n't",
-            r" have": r"'ve",
-            r" is": r"'s",
-            r" would": r"'d",
-            r" had": r"'d",
-            r" has": r"'s",
-            r" will": r"'ll",
-            r" shall": r"'ll",
-            r" are": r"'re",
-            r" were": r"'re",
-            r" am": r"'m",
-        }
+        expansion_contraction_list= [
+            (r"\bwill not\b", "won't"),
+            (r"\blet us\b", r"let's"),
+            (r" not", r"n't"),
+            (r" have", r"'ve"),
+            (r" is", r"'s"),
+            (r" would", r"'d"),
+            (r" had", r"'d"),
+            (r" has", r"'s"),
+            (r" will", r"'ll"),
+            (r" shall", r"'ll"),
+            (r" are", r"'re"),
+            (r" were", r"'re"),
+            (r" am", r"'m"),
+        ]
 
-        text = re.sub(r"\bwill not\b", "won't", text, flags=re.IGNORECASE)
         # Iterate over the keys of the dictionary and replace by contraction if found
-        for substring in text_to_contraction:
-            text = re.sub(
-                substring, text_to_contraction[substring], text, flags=re.IGNORECASE
-            )
+        for pair in expansion_contraction_list:
+            text = re.sub(pair[0], pair[1], text, flags=re.IGNORECASE)
 
         return text
