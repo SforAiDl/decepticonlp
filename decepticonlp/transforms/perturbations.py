@@ -1,7 +1,7 @@
 import abc
 import math
 import random
-
+import string
 import numpy as np
 
 
@@ -26,7 +26,7 @@ class CharacterPerturbations(metaclass=abc.ABCMeta):
         return "given string is not a word"
 
 
-class SpaceCharacterPerturbations(CharacterPerturbations):
+class InsertSpaceCharacterPerturbations(CharacterPerturbations):
     """
         A class used to apply space character perturbations.
         Methods
@@ -35,21 +35,27 @@ class SpaceCharacterPerturbations(CharacterPerturbations):
             - applies the space perturbation on the word and returns it.
     """
 
-    def apply(self, word: str, **kwargs):
+    def apply(self, word: str, char_perturb=False, **kwargs):
         """
-            Insert space at a random position in the word
+            Insert space or character at a random position in the word
 
             word="Somesh"
             edited_word=insert_space(word)
             print(edited_word)
             S omesh
 
+            word="Hello"
+            edited_word=insert_space(word,char_perturb=True)
+            print(edited_word)
+            Henllo
+
             :param
             :word: word to be edited
+            :char_perturb: default(False), boolean, adds a character instead of spaces
             :ignore: default (True), boolean if assertions should be ignored
-
             -returns edited word a random space in between
             """
+
         if kwargs.get("ignore", self.get_ignore_default_value()) and (
             " " in word or len(word) < 2
         ):
@@ -59,10 +65,16 @@ class SpaceCharacterPerturbations(CharacterPerturbations):
 
         assert (
             len(word) >= 2
-        ), "Word needs to have a minimum length of 2 for a swap operation"
+        ), "Word needs to have a minimum length of 2 for an insert operation"
 
-        index = random.randint(1, len(word) - 1)  # select random index
-        return word[:index] + " " + word[index:]  # insert space
+        if char_perturb == True:
+            index = random.randint(0, len(word))  # select random index
+            return (
+                word[:index] + random.choice(string.ascii_letters[:26]) + word[index:]
+            )  # insert character
+        else:
+            index = random.randint(1, len(word) - 1)  # select random index
+            return word[:index] + " " + word[index:]  # insert space
 
 
 class ShuffleCharacterPerturbations(CharacterPerturbations):
