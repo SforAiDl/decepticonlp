@@ -10,7 +10,7 @@ WHITE_SPACE_EXAMPLE = "is wrong"
 
 
 @pytest.mark.parametrize(
-    "word, expected_result", [("Bob", "Bb"), ("Hey there", "Hey there"), ("H", "H"),],
+    "word, expected_result", [("Bob", "Bb"), ("Hey there", "Hey there"), ("H", "H")]
 )
 def test_perturb_delete(word, expected_result):
     random.seed(42)
@@ -31,29 +31,37 @@ def test_perturb_delete_with_whitespace():
 
 
 @pytest.mark.parametrize(
-    "word, expected_result", [("Bob", "B ob"), ("Hey there", "Hey there"), ("H", "H"),],
+    "word, expected_result", [("Bob", "B ob"), ("Hey there", "Hey there"), ("H", "H")]
 )
 def test_perturb_insert_space(word, expected_result):
     random.seed(42)
-    space_perturb = perturbations.SpaceCharacterPerturbations()
+    space_perturb = perturbations.InsertSpaceCharacterPerturbations()
     assert space_perturb.apply(word) == expected_result
 
 
 def test_perturb_insert_space_with_whitespace():
-    space_perturb = perturbations.SpaceCharacterPerturbations()
+    space_perturb = perturbations.InsertSpaceCharacterPerturbations()
     with pytest.raises(AssertionError):
         space_perturb.apply(WHITE_SPACE_EXAMPLE, ignore=False)
 
 
 def test_perturb_insert_space_with_character_size_less_than_two():
-    space_perturb = perturbations.SpaceCharacterPerturbations()
+    space_perturb = perturbations.InsertSpaceCharacterPerturbations()
     with pytest.raises(AssertionError):
         space_perturb.apply("H", ignore=False)
 
 
 @pytest.mark.parametrize(
-    "word, expected_result", [("THAT", "TAHT"),],
+    "word, expected_result",
+    [("hello", "hellzo"), ("Hey there", "Hey there"), ("H", "H")],
 )
+def test_perturb_insert_character(word, expected_result):
+    random.seed(30)
+    char_perturb = perturbations.InsertSpaceCharacterPerturbations()
+    assert char_perturb.apply(word, char_perturb=True) == expected_result
+
+
+@pytest.mark.parametrize("word, expected_result", [("THAT", "TAHT")])
 def test_perturb_shuffle_swap_two(word, expected_result):
     random.seed(0)
     shuffle_perturbations = perturbations.ShuffleCharacterPerturbations()
@@ -61,7 +69,7 @@ def test_perturb_shuffle_swap_two(word, expected_result):
 
 
 @pytest.mark.parametrize(
-    "word, expected_result", [("Adversarial", "Aiavrsedarl"), ("dog", "dog"),],
+    "word, expected_result", [("Adversarial", "Aiavrsedarl"), ("dog", "dog")]
 )
 def test_perturb_shuffle_middle(word, expected_result):
     random.seed(0)
@@ -82,7 +90,7 @@ def test_perturb_shuffle_with_whitespace():
 
 
 @pytest.mark.parametrize(
-    "word, expected_result", [("Noise", "Noixe"), ("Hi there", "Hi there")],
+    "word, expected_result", [("Noise", "Noixe"), ("Hi there", "Hi there")]
 )
 def test_perturb_typo(word, expected_result):
     random.seed(0)
