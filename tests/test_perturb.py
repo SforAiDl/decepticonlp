@@ -48,6 +48,13 @@ def test_perturb_insert_space_with_character_size_less_than_two():
     with pytest.raises(AssertionError):
         space_perturb.apply("H", ignore=False)
 
+@pytest.mark.parametrize(
+    "word, expected_result", [("hello", "hellzo")],
+ )
+def test_perturb_insert_character(word, expected_result):
+    random.seed(30)
+    char_perturb = perturbations.SpaceCharacterPerturbations()
+    assert char_perturb.apply(word,char_perturb=True) == expected_result
 
 @pytest.mark.parametrize(
     "word, expected_result", [("THAT", "TAHT"),],
