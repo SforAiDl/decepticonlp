@@ -225,8 +225,8 @@ class TypoCharacterPerturbations(CharacterPerturbations):
         positions_to_shift = random.sample(range(chars), num_chars_to_shift)
 
         # defining a dictionary of keys located close to each character
-        #json_path=Path("decepticonlp/transforms/keys_in_proximity.json")
-        keys_in_proximity=json.load(open("decepticonlp/transforms/keys_in_proximity.json", "r"))
+        json_path = Path("decepticonlp/transforms/keys_in_proximity.json")
+        keys_in_proximity = json.load(open(json_path, "r"))
 
         for i, c in enumerate(word):
             # Check Upper
