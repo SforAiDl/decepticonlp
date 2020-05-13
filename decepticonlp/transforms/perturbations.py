@@ -261,7 +261,7 @@ class VisuallySimilarCharacterPerturbations(CharacterPerturbations):
         self.homoglyph_dic = json.load(open(json_path, "r"))
         self.arg = args
 
-    def apply(self, word: str, **kwargs):
+    def apply(self, word: str, seed=None, **kwargs):
         """
             unicode_array is a list of different unicodes.
             each char of the word is perturbed by a unicode chosen at random
@@ -280,6 +280,8 @@ class VisuallySimilarCharacterPerturbations(CharacterPerturbations):
             visual_similar_chars("Hey Stop", ignore=False)
             assertion error
             """
+        if seed is not None:
+            np.random.seed(seed)
         if kwargs.get("ignore", self.get_ignore_default_value()) and " " in word:
             return word
         assert " " not in word, self.get_string_not_a_word_error_msg()
@@ -311,4 +313,4 @@ class VisuallySimilarCharacterPerturbations(CharacterPerturbations):
 
 if __name__ == "__main__":
     viz = VisuallySimilarCharacterPerturbations("unicode", "homoglyph")
-    print(viz.apply("adversarial"))
+    print(viz.apply("adversarial", 1))
