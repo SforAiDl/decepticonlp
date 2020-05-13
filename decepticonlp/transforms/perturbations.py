@@ -250,6 +250,7 @@ class VisuallySimilarCharacterPerturbations(CharacterPerturbations):
     """
 
     def apply(self, word: str, **kwargs):
+        np.random.seed(0)
         """
             unicode_array is a list of different unicodes.
             each char of the word is perturbed by a unicode chosen at random
@@ -284,3 +285,33 @@ class VisuallySimilarCharacterPerturbations(CharacterPerturbations):
 
         perturbed_array = np.char.add(char_array, picked_unicode)
         return "".join(perturbed_array)
+
+    def apply_homoglyph(self, word: str, **kwargs):
+        """ 
+        input : adversarial
+        output : @d𑣀𝓮𝓻ꮪ𝕒г𝜾а1
+        Applies homoglyph to each char in word.
+        If char is not present in dictionary,
+        same char is returned.
+        Check dictionary.py for code to get homoglyph char.
+        """
+
+        if kwargs.get("ignore", self.get_ignore_default_value()) and " " in word:
+            return word
+        assert " " not in word, self.get_string_not_a_word_error_msg()
+
+        json_path = Path("homoglyph.json")
+        homoglyph_dic = json.load(open(json_path, "r"))
+
+        char_list = list(word)
+
+        char_list_glyph = []
+        for char in char_list:
+            glyph_string = homoglyph_dic[char]
+            glyph_pick = np.random.choice(len(glyph_string), 1)[0]
+            char_list_glyph.append(glyph_string[glyph_pick])
+
+        return "".join(char_list_glyph)    
+if __name__ == "__main__":
+    viz=VisuallySimilarCharacterPerturbations()
+    print(viz.apply('adversarial'))
