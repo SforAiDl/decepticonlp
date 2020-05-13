@@ -107,19 +107,19 @@ def test_perturb_typo_with_whitespace():
 
 
 @pytest.mark.parametrize(
-    "word, expected_result", [("adversarial", "𝔞𝖉𝘃eⲅꜱ𝐚𝑟𑣃𝛼1"), ("Hi there", "Hi there")]
-)
-def test_perturb_homoglyph(word, expected_result):
-    np.random.seed(0)
-    glyph_perturb = perturbations.VisuallySimilarCharacterPerturbations()
-    assert glyph_perturb.apply_homoglyph(word) == expected_result
-
-
-@pytest.mark.parametrize(
     "word, expected_result",
-    [("adversarial", "a̒d̂v́e̕r̕s̕a̐r̕îa̅l̒"), ("Hi there", "Hi there")],
+    [("adversarial", "âd́v̕e̕r̕s̐a̕r̂i̅a̒ĺ"), ("Hi there", "Hi there")],
 )
 def test_perturb_unicode(word, expected_result):
     np.random.seed(0)
-    glyph_perturb = perturbations.VisuallySimilarCharacterPerturbations()
-    assert glyph_perturb.apply(word) == expected_result
+    viz = perturbations.VisuallySimilarCharacterPerturbations("unicode", "homoglyph")
+    assert viz.apply(word) == expected_result
+
+
+@pytest.mark.parametrize(
+    "word, expected_result", [("adversarial", "𝓪𝓭ꮩ𝑒𝓇ｓ𝖺rꙇa1"), ("Hi there", "Hi there")],
+)
+def test_perturb_homoglyph(word, expected_result):
+    np.random.seed(1)
+    viz = perturbations.VisuallySimilarCharacterPerturbations("unicode", "homoglyph")
+    assert viz.apply(word) == expected_result
