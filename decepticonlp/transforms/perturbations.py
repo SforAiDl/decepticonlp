@@ -17,7 +17,7 @@ class CharacterPerturbations(metaclass=abc.ABCMeta):
     """
 
     @abc.abstractmethod
-    def apply(self, word: str, **kwargs):
+    def apply(self, word: str, **kwargs):  # pragma: no cover
         """Applies perturbation and returns the word."""
         raise NotImplementedError
 
