@@ -311,7 +311,9 @@ class VisuallySimilarCharacterPerturbations(CharacterPerturbations):
             glyph_pick = np.random.choice(len(glyph_string), 1)[0]
             char_list_glyph.append(glyph_string[glyph_pick])
 
-        return "".join(char_list_glyph)    
+        return "".join(char_list_glyph)
+
+
 if __name__ == "__main__":
-    viz=VisuallySimilarCharacterPerturbations()
-    print(viz.apply('adversarial'))
+    viz = VisuallySimilarCharacterPerturbations()
+    print(viz.apply("adversarial"))
