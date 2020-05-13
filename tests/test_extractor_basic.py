@@ -4,8 +4,7 @@ from decepticonlp.extractor import basic
 
 
 @pytest.mark.parametrize(
-    "words, expected_result",
-    [(["Hey", "There", "Somesh"], [1]), (["Hey", "there"], [1])],
+    "words, expected_result", [(["This", "is", "test"], [1]), (["Hey", "there"], [1])],
 )
 def test_random_extract(words, expected_result):
     random.seed(0)
@@ -14,7 +13,7 @@ def test_random_extract(words, expected_result):
 
 
 @pytest.mark.parametrize(
-    "words, expected_result", [(["Raju", "Is", "NLP", "GAWD"], [3, 1])]
+    "words, expected_result", [(["This", "is", "a", "test"], [3, 1])]
 )
 def test_random_k_extract(words, expected_result):
     random.seed(0)

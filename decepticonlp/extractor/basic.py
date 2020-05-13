@@ -5,10 +5,11 @@ import random
 class ImportantWordExtractor(metaclass=abc.ABCMeta):
     """
         An abstract class used to represent the Keyword Extractor.SubClass should implement the extract method.
+        
         Methods
         -------
         extract(self, words: list, **kwargs)
-            extracts top_k words and returns their index.
+            returns the index of important words in the list.
     """
 
     @abc.abstractmethod
@@ -16,23 +17,26 @@ class ImportantWordExtractor(metaclass=abc.ABCMeta):
         """Extracts Important Word and returns the Index."""
         raise NotImplementedError
 
-    def empty_error_msg(self):  # pragma: no cover
+    def empty_error_msg(self):
         return "given list of words is empty or invalid"
 
-    def word_less_than_k(self):  # pragma: no cover
+    def word_less_than_k(self):
         return "number of words should be greater than top_k"
 
 
 class RandomImportantWordExtractor(ImportantWordExtractor):
     """
         A class used to apply random word extractor.
+
         Methods
         -------
         extract(self, words: list, top_k = 1, **kwargs)
             - extracts top_k random words and returns their index.
-        :params:
-        :words: - List of Words
-        :top_k: - Number of words to be extracted
+        
+        Parameters
+        --------
+        words - List of words.
+        top_k - Number of words to be extracted
     """
 
     def extract(self, words: list, top_k=1, **kwargs):
