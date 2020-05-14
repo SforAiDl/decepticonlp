@@ -1,8 +1,10 @@
 import abc
 import math
 import random
-
+import json
+import string
 import numpy as np
+from pathlib import Path
 
 
 class CharacterPerturbations(metaclass=abc.ABCMeta):
@@ -15,7 +17,7 @@ class CharacterPerturbations(metaclass=abc.ABCMeta):
     """
 
     @abc.abstractmethod
-    def apply(self, word: str, **kwargs):
+    def apply(self, word: str, **kwargs):  # pragma: no cover
         """Applies perturbation and returns the word."""
         raise NotImplementedError
 
@@ -26,7 +28,7 @@ class CharacterPerturbations(metaclass=abc.ABCMeta):
         return "given string is not a word"
 
 
-class SpaceCharacterPerturbations(CharacterPerturbations):
+class InsertSpaceCharacterPerturbations(CharacterPerturbations):
     """
         A class used to apply space character perturbations.
         Methods
@@ -35,21 +37,27 @@ class SpaceCharacterPerturbations(CharacterPerturbations):
             - applies the space perturbation on the word and returns it.
     """
 
-    def apply(self, word: str, **kwargs):
+    def apply(self, word: str, char_perturb=False, **kwargs):
         """
-            Insert space at a random position in the word
+            Insert space or character at a random position in the word
 
             word="Somesh"
             edited_word=insert_space(word)
             print(edited_word)
             S omesh
 
+            word="Hello"
+            edited_word=insert_space(word,char_perturb=True)
+            print(edited_word)
+            Henllo
+
             :param
             :word: word to be edited
+            :char_perturb: default(False), boolean, adds a character instead of spaces
             :ignore: default (True), boolean if assertions should be ignored
-
             -returns edited word a random space in between
             """
+
         if kwargs.get("ignore", self.get_ignore_default_value()) and (
             " " in word or len(word) < 2
         ):
@@ -59,10 +67,16 @@ class SpaceCharacterPerturbations(CharacterPerturbations):
 
         assert (
             len(word) >= 2
-        ), "Word needs to have a minimum length of 2 for a swap operation"
+        ), "Word needs to have a minimum length of 2 for an insert operation"
 
-        index = random.randint(1, len(word) - 1)  # select random index
-        return word[:index] + " " + word[index:]  # insert space
+        if char_perturb == True:
+            index = random.randint(0, len(word))  # select random index
+            return (
+                word[:index] + random.choice(string.ascii_letters[:26]) + word[index:]
+            )  # insert character
+        else:
+            index = random.randint(1, len(word) - 1)  # select random index
+            return word[:index] + " " + word[index:]  # insert space
 
 
 class ShuffleCharacterPerturbations(CharacterPerturbations):
@@ -203,71 +217,26 @@ class TypoCharacterPerturbations(CharacterPerturbations):
 
         assert " " not in word, self.get_string_not_a_word_error_msg()
 
-        # convert word to list (string is immutable)
         word = list(word)
-
-        num_chars_to_shift = math.ceil(len(word) * kwargs.get("probability", 0.1))
-
-        # checking for capitalizations
-        capitalization = [False] * len(word)
-
-        # convert to lowercase and record capitalization
-        for i in range(len(word)):
-            capitalization[i] = word[i].isupper()
-            word[i] = word[i].lower()
+        chars = len(word)
+        num_chars_to_shift = math.ceil(chars * kwargs.get("probability", 0.1))
 
         # list of characters to be switched
-        positions_to_shift = []
-        for i in range(num_chars_to_shift):
-            positions_to_shift.append(random.randint(0, len(word) - 1))
+        positions_to_shift = random.sample(range(chars), num_chars_to_shift)
 
         # defining a dictionary of keys located close to each character
-        keys_in_proximity = {
-            "a": ["q", "w", "s", "x", "z"],
-            "b": ["v", "g", "h", "n"],
-            "c": ["x", "d", "f", "v"],
-            "d": ["s", "e", "r", "f", "c", "x"],
-            "e": ["w", "s", "d", "r"],
-            "f": ["d", "r", "t", "g", "v", "c"],
-            "g": ["f", "t", "y", "h", "b", "v"],
-            "h": ["g", "y", "u", "j", "n", "b"],
-            "i": ["u", "j", "k", "o"],
-            "j": ["h", "u", "i", "k", "n", "m"],
-            "k": ["j", "i", "o", "l", "m"],
-            "l": ["k", "o", "p"],
-            "m": ["n", "j", "k", "l"],
-            "n": ["b", "h", "j", "m"],
-            "o": ["i", "k", "l", "p"],
-            "p": ["o", "l"],
-            "q": ["w", "a", "s"],
-            "r": ["e", "d", "f", "t"],
-            "s": ["w", "e", "d", "x", "z", "a"],
-            "t": ["r", "f", "g", "y"],
-            "u": ["y", "h", "j", "i"],
-            "v": ["c", "f", "g", "v", "b"],
-            "w": ["q", "a", "s", "e"],
-            "x": ["z", "s", "d", "c"],
-            "y": ["t", "g", "h", "u"],
-            "z": ["a", "s", "x"],
-        }
+        json_path = Path("decepticonlp/transforms/keys_in_proximity.json")
+        keys_in_proximity = json.load(open(json_path, "r"))
 
-        # insert typo
-        for pos in positions_to_shift:
-            # no typo insertion for special characters
-            try:
-                typo_list = keys_in_proximity[word[pos]]
-                word[pos] = random.choice(typo_list)
-            except:
-                break
+        for i, c in enumerate(word):
+            # Check Upper
 
-        # reinsert capitalization
-        for i in range(len(word)):
-            if capitalization[i]:
-                word[i] = word[i].upper()
+            # Check if in position and given keys
+            if i in positions_to_shift and c in keys_in_proximity:
+                word[i] = random.choice(keys_in_proximity[c])
 
         # recombine
         word = "".join(word)
-
         return word
 
 
