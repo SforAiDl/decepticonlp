@@ -1,7 +1,10 @@
 _author_ = "Somesh Singh"
 
+import random
+
 import pytest
-from decepticonlp.metrics.char_metrics import *
+
+from decepticonlp.metrics import char_metrics
 
 
 @pytest.mark.parametrize(
@@ -9,7 +12,8 @@ from decepticonlp.metrics.char_metrics import *
     [("Word", "Wordy", 1), ("Word", "Wrod", 2), ("H", "H", 0)],
 )
 def test_levenshtein(text1, text2, expected_result):
-    assert levenshtein(text1, text2) == expected_result
+    levenshtein_distance = char_metrics.Levenshtein()
+    assert levenshtein_distance.calculate(text1, text2) == expected_result
 
 
 @pytest.mark.parametrize(
@@ -17,7 +21,8 @@ def test_levenshtein(text1, text2, expected_result):
     [("Word", "Wordy", 0.1111111111111111), ("Word", "Wrod", 0.25), ("H", "H", 0)],
 )
 def test_levenshtein_sum(text1, text2, expected_result):
-    err = levenshtein(text1, text2, "sum") - expected_result
+    levenshtein_distance = char_metrics.Levenshtein()
+    err = levenshtein_distance.calculate(text1, text2, "sum") - expected_result
     assert -1e-5 < err < 1e-5
 
 
@@ -26,7 +31,8 @@ def test_levenshtein_sum(text1, text2, expected_result):
     [("Word", "Wordy", 0.2), ("Word", "Wrod", 0.5), ("H", "H", 0)],
 )
 def test_levenshtein_lcs(text1, text2, expected_result):
-    err = levenshtein(text1, text2, "lcs") - expected_result
+    levenshtein_distance = char_metrics.Levenshtein()
+    err = levenshtein_distance.calculate(text1, text2, "lcs") - expected_result
     assert -1e-5 < err < 1e-5
 
 
@@ -39,7 +45,8 @@ def test_levenshtein_lcs(text1, text2, expected_result):
     ],
 )
 def test_euclid(text1, text2, expected_result):
-    err = euclid(text1, text2) - expected_result
+    euclidean_distance = char_metrics.Euclidean()
+    err = euclidean_distance.calculate(text1, text2) - expected_result
     assert -1e-5 < err < 1e-5
 
 
@@ -52,7 +59,8 @@ def test_euclid(text1, text2, expected_result):
     ],
 )
 def test_euclid_norm(text1, text2, expected_result):
-    err = euclid(text1, text2, norm=True) - expected_result
+    euclidean_distance = char_metrics.Euclidean()
+    err = euclidean_distance.calculate(text1, text2, norm=True) - expected_result
     assert -1e-5 < err < 1e-5
 
 
@@ -65,7 +73,8 @@ def test_euclid_norm(text1, text2, expected_result):
     ],
 )
 def test_jaccard(text1, text2, expected_result):
-    err = jaccard(text1, text2) - expected_result
+    jaccard_similarity = char_metrics.Jaccard()
+    err = jaccard_similarity.calculate(text1, text2) - expected_result
     assert -1e-5 < err < 1e-5
 
 
@@ -79,10 +88,12 @@ def test_jaccard(text1, text2, expected_result):
     ],
 )
 def test_jaccard_window(text1, text2, window, expected_result):
-    err = jaccard(text1, text2, ngrams=window) - expected_result
+    jaccard_similarity = char_metrics.Jaccard()
+    err = jaccard_similarity.calculate(text1, text2, ngrams=window) - expected_result
     assert -1e-5 < err < 1e-5
 
 
 def test_jaccard_with_short_length():
     with pytest.raises(AssertionError):
-        jaccard("Word", "Wordy", ngrams=10, ignore=False)
+        jaccard_similarity = char_metrics.Jaccard()
+        jaccard_similarity.calculate("Word", "Wordy", ngrams=10, ignore=False)

@@ -15,6 +15,6 @@ install:
 script:
   - black --check decepticonlp
   - black --check tests
-  - pytest --cov='./decepticonlp/'
+  - pytest --cov='./decepticonlp/' --cov-config=.coveragerc
 after_success:
   - codecov # submit coverage
