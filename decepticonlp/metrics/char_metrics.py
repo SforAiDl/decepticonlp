@@ -5,6 +5,7 @@ import string
 import numpy as np
 from pathlib import Path
 
+
 class CharacterMetrics(metaclass=abc.ABCMeta):
     """
         An abstract class used to represent the character metrics. Subclasses implement the calculate method.
@@ -13,6 +14,7 @@ class CharacterMetrics(metaclass=abc.ABCMeta):
         apply(self, text1: str, text2: str, **kwargs)
             - calculates the similarity/distance between two strings using the appropriate metric.
     """
+
     @abc.abstractmethod
     def calculate(self, text1: str, text2: str, **kwargs):  # pragma: no cover
         """calculates distance/similarity and returns the same"""
@@ -20,6 +22,7 @@ class CharacterMetrics(metaclass=abc.ABCMeta):
 
     def get_ignore_default_value(self):
         return True
+
 
 class Levenshtein(CharacterMetrics):
     """
@@ -30,7 +33,7 @@ class Levenshtein(CharacterMetrics):
         calculate(self, text1:str, text2: str, **kwargs)
             - calculates levenshtein distance and returns the same
     """
-    
+
     def calculate(self, text1: str, text2: str, normalize="none", **kwargs):
         """
         Calculate Levenshtein Distance using dynamic programming optimized with (np)
@@ -65,7 +68,7 @@ class Levenshtein(CharacterMetrics):
         The normalized distance is not a metric, as it violates the triangle inequality.
         https://stackoverflow.com/questions/45783385/normalizing-the-edit-distance
         """
-        
+
         size_x, size_y = len(text1) + 1, len(text2) + 1
         matrix = np.zeros((size_x, size_y))
         x, y = np.arange(size_x), np.arange(size_y)
@@ -80,7 +83,9 @@ class Levenshtein(CharacterMetrics):
                     )
                 else:
                     matrix[x, y] = min(
-                        matrix[x - 1, y] + 1, matrix[x - 1, y - 1] + 1, matrix[x, y - 1] + 1
+                        matrix[x - 1, y] + 1,
+                        matrix[x - 1, y - 1] + 1,
+                        matrix[x, y - 1] + 1,
                     )
         distance = matrix[size_x - 1, size_y - 1]
         if normalize == "sum":
@@ -100,7 +105,7 @@ class Jaccard(CharacterMetrics):
         calculate(self, text1:str, text2: str, **kwargs)
             - calculates jaccard similarity and returns the same
     """
-    
+
     def calculate(self, text1: str, text2: str, ngrams=1, **kwargs):
         """
         Calculate Jaccard Distance :
@@ -123,13 +128,15 @@ class Jaccard(CharacterMetrics):
         returns jaccard distance
         """
 
-        if kwargs.get("ignore", self.get_ignore_default_value()) and not (len(text1) >= ngrams and len(text2) >= ngrams):
+        if kwargs.get("ignore", self.get_ignore_default_value()) and not (
+            len(text1) >= ngrams and len(text2) >= ngrams
+        ):
             return self.calculate(text1, text2)
 
         assert (
             len(text1) >= ngrams and len(text2) >= ngrams
         ), "text size lesser than ngrams passed"
-        
+
         grams1 = [tuple(text1[i : i + ngrams]) for i in range(len(text1) - ngrams + 1)]
         grams2 = [tuple(text2[i : i + ngrams]) for i in range(len(text2) - ngrams + 1)]
         x, y = set(grams1), set(grams2)
@@ -146,7 +153,7 @@ class Euclidean(CharacterMetrics):
         calculate(self, text1:str, text2: str, **kwargs)
             - calculates euclidean distance and returns the same
     """
-    
+
     def calculate(self, text1: str, text2: str, norm=False, **kwargs):
         """
         the Euclidean distance between strings p and q given,
@@ -194,4 +201,4 @@ class Euclidean(CharacterMetrics):
         if norm:
             return dist / np.sqrt(len(vocab))
         else:
-            return dist       
+            return dist
