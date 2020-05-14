@@ -4,6 +4,8 @@ import random
 import string
 import numpy as np
 from pathlib import Path
+import tensorflow as tf
+import tensorflow_hub as hub
 
 
 class CharacterMetrics(metaclass=abc.ABCMeta):
@@ -202,3 +204,47 @@ class Euclidean(CharacterMetrics):
             return dist / np.sqrt(len(vocab))
         else:
             return dist
+
+
+class SemanticSimilarity(CharacterMetrics):
+    """A class used to calculate the semantic similarity (cosine) between two sentences.
+       Methods
+       -------
+       calculate(text1: str, text2: str, **kwargs)
+        -Computes the Semantic Similarity and returns it.   
+    """
+
+    def calculate(self, text1: str, text2: str, **kwargs):
+        """
+            
+            This function computes the semantic similarity (cosine similarity) between two sentences using Google's Universal Sentence Encoder.
+            
+            Example:
+            sentence1="He is playing the guitar."
+            sentence2="The deftness with which he plays the guitar is enthralling to watch."
+            print(semantic_similarity(sentence1, sentence2))
+            0.63631517
+
+            :params
+            :text1: First string to be compared
+            :text2: Second string to be compared
+            :type text1: string
+            :type text2: string
+
+            returns the semantic similarity
+
+        """
+
+        # Load the Universal Sentence Encoder. The user should have an active user connection.
+        universal_sentence_encoder = hub.load(
+            "https://tfhub.dev/google/universal-sentence-encoder/4"
+        )
+
+        # Compute the embeddings of the two sentences
+        embeddings = universal_sentence_encoder([text1, text2])
+        embeddings = embeddings.numpy()
+
+        # Compute the cosine similarity and return the value
+        return np.dot(embeddings[0], embeddings[1]) / (
+            np.linalg.norm(embeddings[0]) * np.linalg.norm(embeddings[1])
+        )
