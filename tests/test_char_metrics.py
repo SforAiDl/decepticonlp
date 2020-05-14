@@ -73,7 +73,7 @@ def test_euclid_norm(text1, text2, expected_result):
     ],
 )
 def test_jaccard(text1, text2, expected_result):
-    jaccard_similarity = Jaccard()
+    jaccard_similarity = char_metrics.Jaccard()
     err = jaccard_similarity.calculate(text1, text2) - expected_result
     assert -1e-5 < err < 1e-5
 
@@ -88,12 +88,12 @@ def test_jaccard(text1, text2, expected_result):
     ],
 )
 def test_jaccard_window(text1, text2, window, expected_result):
-    jaccard_similarity = Jaccard()
+    jaccard_similarity = char_metrics.Jaccard()
     err = jaccard_similarity.calculate(text1, text2, ngrams=window) - expected_result
     assert -1e-5 < err < 1e-5
 
 
 def test_jaccard_with_short_length():
     with pytest.raises(AssertionError):
-        jaccard_similarity = Jaccard()
+        jaccard_similarity = char_metrics.Jaccard()
         jaccard_similarity.calculate("Word", "Wordy", ngrams=10, ignore=False)
