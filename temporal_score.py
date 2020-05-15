@@ -8,8 +8,8 @@ class RNN(nn.Module):
         self.rnn = nn.RNN(57,1)
 
     def forward(self, x):
-        output = self.rnn(x)
-        return output
+        hidden,output = self.rnn(x)
+        return hidden,output
 all_letters = string.ascii_letters + " .,;'"
 n_letters = len(all_letters)
 def letterToIndex(letter):
@@ -24,17 +24,16 @@ def lineToTensor(line):
         tensor[li][0][letterToIndex(letter)] = 1
     return tensor
 
-def replaceone(model, inputs):
-    pred = model(inputs)
-    losses = torch.zeros(inputs.size()[0],inputs.size()[2])
-    with torch.no_grad():
-        for i in range(inputs.size()[2]):
-            tempinputs = inputs.clone()
-            tempinputs[:,:,i].zero_()
-            tempoutput = model(tempinputs)
-            losses[:,i] = F.nll_loss(tempoutput, pred, reduce=False)
-    return losses
+def temporal_score(model, inputs):
+	_,pred = model(inputs)
+	losses = torch.zeros(inputs.shape[0:2])	
+	with torch.no_grad():
+		for i in range(inputs.size()[0]):
+			tempinputs = inputs.clone()
+			tempinputs[i,:,:].zero_()
+			_,tempoutput = model(tempinputs)
+			losses[i] = torch.dist(tempoutput.squeeze(1), pred.squeeze(1)) #L2 Norm
+		return losses
 rnn=RNN()
 encoded = lineToTensor('Harshit')
-
-print(replaceone(rnn,encoded))
+print(temporal_score(rnn,encoded))
