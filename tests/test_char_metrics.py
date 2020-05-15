@@ -6,6 +6,8 @@ import pytest
 
 from decepticonlp.metrics import char_metrics
 
+import math
+
 
 @pytest.mark.parametrize(
     "text1, text2, expected_result",
@@ -97,3 +99,27 @@ def test_jaccard_with_short_length():
     with pytest.raises(AssertionError):
         jaccard_similarity = char_metrics.Jaccard()
         jaccard_similarity.calculate("Word", "Wordy", ngrams=10, ignore=False)
+
+
+@pytest.mark.parametrize(
+    "text1, text2, expected_result",
+    [
+        (
+            "The quick brown fox leapt at the lazy dog.",
+            "The sprightly fox jumped at the indolent dog.",
+            0.6916927,
+        ),
+        (
+            "Sachin is the best batsman in the world.",
+            "Gully Boy is the perfect rags to riches story.",
+            0.29331264,
+        ),
+        ("He has insomnia.", "His productivity is coffee-fueled.", 0.38121146),
+        ("She is bored to death.", "The sky looks so picturesque today.", 0.12955433),
+    ],
+)
+def test_semantic_similarity(text1, text2, expected_result):
+    semantic_similarity = char_metrics.SemanticSimilarity()
+    assert math.isclose(
+        semantic_similarity.calculate(text1, text2), expected_result, rel_tol=1e-6
+    )
