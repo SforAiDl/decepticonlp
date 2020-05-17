@@ -313,4 +313,4 @@ class VisuallySimilarCharacterPerturbations(CharacterPerturbations):
 
 if __name__ == "__main__":
     viz = VisuallySimilarCharacterPerturbations("unicode", "homoglyph")
-    print(viz.apply("adversarial", 1))
+    print(viz.apply("adversarial", 0))

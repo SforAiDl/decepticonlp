@@ -7,7 +7,6 @@ import pytest
 from decepticonlp.transforms import perturbations
 
 
-
 WHITE_SPACE_EXAMPLE = "is wrong"
 
 
