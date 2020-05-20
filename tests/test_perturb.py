@@ -6,6 +6,7 @@ import pytest
 
 from decepticonlp.transforms import perturbations
 
+
 WHITE_SPACE_EXAMPLE = "is wrong"
 
 
@@ -102,3 +103,20 @@ def test_perturb_typo_with_whitespace():
     type_perturbations = perturbations.TypoCharacterPerturbations()
     with pytest.raises(AssertionError):
         type_perturbations.apply(WHITE_SPACE_EXAMPLE, probability=0.1, ignore=False)
+
+
+@pytest.mark.parametrize(
+    "word, expected_result",
+    [("adversarial", "âd́v̕e̕r̕s̐a̕r̂i̅a̒ĺ"), ("Hi there", "Hi there")],
+)
+def test_perturb_unicode(word, expected_result):
+    viz = perturbations.VisuallySimilarCharacterPerturbations("unicode", "homoglyph")
+    assert viz.apply(word, 0) == expected_result
+
+
+@pytest.mark.parametrize(
+    "word, expected_result", [("adversarial", "𝓪𝓭ꮩ𝑒𝓇ｓ𝖺rꙇa1"), ("Hi there", "Hi there")],
+)
+def test_perturb_homoglyph(word, expected_result):
+    viz = perturbations.VisuallySimilarCharacterPerturbations("unicode", "homoglyph")
+    assert viz.apply(word, 1) == expected_result
