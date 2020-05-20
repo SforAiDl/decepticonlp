@@ -123,3 +123,4 @@ def test_semantic_similarity(text1, text2, expected_result):
     assert math.isclose(
         semantic_similarity.calculate(text1, text2), expected_result, rel_tol=1e-6
     )
+

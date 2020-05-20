@@ -1,29 +1,16 @@
-import torch.nn as nn
-import torch.nn.functional as F
 import torch
-import string
-
-all_letters = string.ascii_letters + " .,;'"
-n_letters = len(all_letters)
-
-
-def lineToTensor(line):
-    tensor = torch.zeros(len(line), 1, n_letters)
-    for li, letter in enumerate(line):
-        tensor[li][all_letters.find(letter)] = 1
-    return tensor
-
 
 class RankCharacters:
     """
-        Accepts a feature vector tensor and outputs a temporal ranking of characters
+        Accepts a feature vector torch tensor and outputs a temporal ranking of characters
+        inputs of shape (no_chars,feature_vector_size)
     """
 
     def temporal_score(self, inputs):
         """ 
             Considering a input sequence x1,x2,...,xn
             we calculate T(xi) = F(x1,x2,...,xi) - F(x1,x2,...,xi-1)
-            where F is one pass through a RNN cell
+            where F is one pass through a RNN cell 
         """
         model = nn.RNN(inputs.shape[2], 1)
         _, pred = model(inputs)
@@ -60,8 +47,3 @@ class RankCharacters:
             Combined Score = temporal_score + λ(temportal_tail_score),
         """
         return self.temporal_score(inputs) + lambda_ * self.temportal_tail_score(inputs)
-
-
-encoded = lineToTensor("Good")
-rc = RankCharacters()
-print(rc.combined_score(encoded, 0.5))

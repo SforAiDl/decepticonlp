@@ -1,10 +1,7 @@
 import abc
 import math
 import random
-<<<<<<< HEAD
-=======
 import json
->>>>>>> 024452ca3fd7f7f4f676d6aaa124288e509d3d14
 import string
 import numpy as np
 from pathlib import Path
