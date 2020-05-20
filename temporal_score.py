@@ -2,18 +2,14 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch
 import string
+import gensim.downloader as api
+model_gigaword = api.load("glove-wiki-gigaword-100")
 
-all_letters = string.ascii_letters + " .,;'"
-n_letters = len(all_letters)
-
-
-def lineToTensor(line):
-    tensor = torch.zeros(len(line), 1, n_letters)
-    for li, letter in enumerate(line):
-        tensor[li][all_letters.find(letter)] = 1
-    return tensor
-
-
+def sentenceToTensor(sent):
+    op = torch.tensor((len(sent.split(' ')),model_gigaword['i'].shape[0]))
+    for i,word in enumerate(sent.split(' ')):
+        op[i] = torch.from_numpy(model_gigaword[word])
+    return op
 class RankCharacters:
     """
         Accepts a feature vector tensor and outputs a temporal ranking of characters
@@ -62,6 +58,7 @@ class RankCharacters:
         return self.temporal_score(inputs) + lambda_ * self.temportal_tail_score(inputs)
 
 
-encoded = lineToTensor("Good")
-rc = RankCharacters()
-print(rc.combined_score(encoded, 0.5))
+encoded = sentenceToTensor("i love dogs")
+print(encoded,encoded.shape)
+# rc = RankCharacters()
+# print(rc.combined_score(encoded, 0.5))
