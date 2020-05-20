@@ -174,7 +174,7 @@ class DamerauLevenshtein(CharacterMetrics):
                 matrix[row + 1][col + 1] = min(
                     matrix[row][col] + cost_substitution,
                     matrix[row + 1][col] + 1,
-                    matrix[row][col + 1],
+                    matrix[row][col + 1] + 1,
                 )
 
                 # transposition
