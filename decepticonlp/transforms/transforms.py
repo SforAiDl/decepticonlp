@@ -47,8 +47,8 @@ class Compose(object):
 
 		Example:
 			tfms=transforms.Compose([
-									transforms.AddChar("RandomWordExtractor", True),
-									transforms.VisuallySimilarChar("RandomWordExtractor")
+				transforms.AddChar("RandomWordExtractor", True),
+				transforms.VisuallySimilarChar("RandomWordExtractor")
 									])
 			transformed=tfms("This is fascinating!")
 			print(transformed)
