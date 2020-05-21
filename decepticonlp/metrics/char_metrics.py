@@ -248,3 +248,108 @@ class SemanticSimilarity(CharacterMetrics):
         return np.dot(embeddings[0], embeddings[1]) / (
             np.linalg.norm(embeddings[0]) * np.linalg.norm(embeddings[1])
         )
+
+
+class DamerauLevenshtein(CharacterMetrics):
+    """
+        A class used to calculate the Damerau-Levenshtein's edit distance between two strings.
+        Methods
+        
+        -------
+        calculate(self, text1:str, text2: str, **kwargs)
+            - calculates Damerau-Levenshtein's edit distance and returns the same
+    """
+
+    def calculate(self, text1: str, text2: str, normalize="none", **kwargs):
+        """
+        edit operations:
+            insertion: xyz -> xayz, xyzb
+            deletion:  xyz -> xz, yz
+            substitution: xyz -> ayz, xbz
+            transposition: xyz -> xzy, yxz
+            
+            #levenshtein edit distance
+            "a cat" -> "an abct" = 4
+            
+            #damerau levenshtein edit distance
+            "a cat" -> "an abct" = 3
+        
+        Usage:
+        DL = DamerauLevenshtein()
+        DL.calculate("a cat", "an abct")
+        3
+        DL.calculate("a cat", "an abct", normalize="sum")
+        0.25
+        DL.calculate("a cat", "an abct", normalize="lcs")
+        0.42857142857142855
+            
+        
+        :params
+        :text1: First string
+        :text2: Second string
+        :normalize: pass "sum" for total Levenshtein distance, "lcs" for maximum normalization, "none" default
+        :type text1: String
+        :type text2: String
+        :type normalize: String
+        
+        https://en.wikipedia.org/wiki/Damerau%E2%80%93Levenshtein_distance
+        https://gist.github.com/badocelot/5327337
+        """
+
+        # INF = number greater than maximum possible distance
+        INF = len(text1) + len(text2)
+
+        # MATRIX: (len(text1) + 2) x (len(text2) + 2)
+        matrix = [[INF for n in range(len(text2) + 2)]]
+        matrix += [[INF] + list(range(len(text2) + 1))]
+        matrix += [[INF, m] + [0] * len(text2) for m in range(1, len(text1) + 1)]
+
+        # row where each element was last encountered
+        last_row = {}
+
+        # fill in costs
+        for row in range(1, len(text1) + 1):
+            # current char in text1
+            char_text1 = text1[row - 1]
+
+            # column where this particular element was last matched
+            last_match_column = 0
+
+            for col in range(1, len(text2) + 1):
+                # current char in text2
+                char_text2 = text2[col - 1]
+
+                # last matching row for this particular element
+                last_match_row = last_row.get(char_text2, 0)
+
+                cost_substitution = 0 if char_text1 == char_text2 else 1
+
+                # substitution, addition, deletion
+                matrix[row + 1][col + 1] = min(
+                    matrix[row][col] + cost_substitution,
+                    matrix[row + 1][col] + 1,
+                    matrix[row][col + 1] + 1,
+                )
+
+                # transposition
+                matrix[row + 1][col + 1] = min(
+                    matrix[last_match_row][last_match_column]
+                    + (row - last_match_row - 1)
+                    + 1
+                    + (col - last_match_column - 1),
+                    matrix[row + 1][col + 1],
+                )
+
+                if cost_substitution == 0:
+                    last_match_column = col
+
+            last_row[char_text1] = row
+
+        distance = matrix[-1][-1]
+
+        if normalize == "sum":
+            return distance / (len(text1) + len(text2))
+        elif normalize == "lcs":
+            return distance / (max(len(text1), len(text2)))
+        else:
+            return distance
