@@ -19,6 +19,14 @@ def test_levenshtein(text1, text2, expected_result):
 
 
 @pytest.mark.parametrize(
+    "text1, text2, expected_result", [("Word", "Wrod", 1)],
+)
+def test_levenshtein_osa(text1, text2, expected_result):
+    levenshtein_distance = char_metrics.Levenshtein()
+    assert levenshtein_distance.calculate(text1, text2, osa=True) == expected_result
+
+
+@pytest.mark.parametrize(
     "text1, text2, expected_result",
     [("Word", "Wordy", 0.1111111111111111), ("Word", "Wrod", 0.25), ("H", "H", 0)],
 )
