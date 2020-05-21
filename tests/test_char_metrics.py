@@ -39,6 +39,34 @@ def test_levenshtein_lcs(text1, text2, expected_result):
 
 
 @pytest.mark.parametrize(
+    "text1, text2, expected_result", [("a cat", "an abct", 3), ("a cat", "a tc", 2)],
+)
+def test_damerau_levenshtein(text1, text2, expected_result):
+    damerau_levenshtein_distance = char_metrics.DamerauLevenshtein()
+    assert damerau_levenshtein_distance.calculate(text1, text2) == expected_result
+
+
+@pytest.mark.parametrize(
+    "text1, text2, expected_result",
+    [("a cat", "an abct", 0.42857142857142855), ("a cat", "a tc", 0.4)],
+)
+def test_damerau_levenshtein_lcs(text1, text2, expected_result):
+    damerau_levenshtein_distance = char_metrics.DamerauLevenshtein()
+    err = damerau_levenshtein_distance.calculate(text1, text2, "lcs") - expected_result
+    assert -1e-5 < err < 1e-5
+
+
+@pytest.mark.parametrize(
+    "text1, text2, expected_result",
+    [("a cat", "an abct", 0.25), ("a cat", "a tc", 0.2222222222222222)],
+)
+def test_damerau_levenshtein_sum(text1, text2, expected_result):
+    damerau_levenshtein_distance = char_metrics.DamerauLevenshtein()
+    err = damerau_levenshtein_distance.calculate(text1, text2, "sum") - expected_result
+    assert -1e-5 < err < 1e-5
+
+
+@pytest.mark.parametrize(
     "text1, text2, expected_result",
     [
         ("Word", "Wordy", 1.4142135623730951),
