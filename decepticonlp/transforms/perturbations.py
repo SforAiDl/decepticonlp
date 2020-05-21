@@ -305,9 +305,12 @@ class VisuallySimilarCharacterPerturbations(CharacterPerturbations):
 
             char_list_glyph = []
             for char in char_list:
-                glyph_string = self.homoglyph_dic[char]
-                glyph_pick = np.random.choice(len(glyph_string), 1)[0]
-                char_list_glyph.append(glyph_string[glyph_pick])
+                if char in self.homoglyph_dic:
+                    glyph_string = self.homoglyph_dic[char]
+                    glyph_pick = np.random.choice(len(glyph_string), 1)[0]
+                    char_list_glyph.append(glyph_string[glyph_pick])
+                else:
+                    char_list_glyph.append(char)
             return "".join(char_list_glyph)
 
 
