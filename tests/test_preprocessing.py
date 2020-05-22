@@ -14,7 +14,7 @@ import math
         ("Adversarial Library", "adversari librari"),
     ],
 )
-def test_stemmer_default(text1, text2, expected_result):
+def test_stemmer_default(text1, expected_result):
     stem = preprocessing.Stem()
     assert stem.apply(text1) == expected_result
 
@@ -26,6 +26,6 @@ def test_stemmer_default(text1, text2, expected_result):
         ("Adversarial Library", "advers libr"),
     ],
 )
-def test_stemmer_lancaster(text1, text2, expected_result):
+def test_stemmer_lancaster(text1, expected_result):
     stem = preprocessing.Stem()
     assert stem.apply(text1, type="lancaster") == expected_result
