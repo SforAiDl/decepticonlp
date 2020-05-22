@@ -10,8 +10,8 @@ import math
 @pytest.mark.parametrize(
     "text1, expected_result",
     [
-        ("Dinosaurs were killed by asteroids", "dinosaur were kill by asteroid"),
-        ("Adversarial Library", "adversari librari"),
+        ("Dinosaurs were killed by asteroids", "dinosaur were kill by asteroid "),
+        ("Adversarial Library", "adversari librari "),
     ],
 )
 def test_stemmer_default(text1, expected_result):
@@ -22,8 +22,8 @@ def test_stemmer_default(text1, expected_result):
 @pytest.mark.parametrize(
     "text1, expected_result",
     [
-        ("Dinosaurs were killed by asteroids", "dinosa wer kil by asteroid"),
-        ("Adversarial Library", "advers libr"),
+        ("Dinosaurs were killed by asteroids", "dinosa wer kil by asteroid "),
+        ("Adversarial Library", "advers libr "),
     ],
 )
 def test_stemmer_lancaster(text1, expected_result):
