@@ -13,7 +13,7 @@ class CharacterMetrics(metaclass=abc.ABCMeta):
         An abstract class used to represent the character metrics. Subclasses implement the calculate method.
         Methods
         -------
-        apply(self, text1: str, text2: str, **kwargs)
+        calculate(self, text1: str, text2: str, **kwargs)
             - calculates the similarity/distance between two strings using the appropriate metric.
     """
 
@@ -36,36 +36,36 @@ class Levenshtein(CharacterMetrics):
             - calculates levenshtein distance and returns the same
     """
 
-    def calculate(self, text1: str, text2: str, normalize="none", **kwargs):
+    def calculate(self, text1: str, text2: str, normalize="none", osa=False, **kwargs):
         """
         Calculate Levenshtein Distance using dynamic programming optimized with (np)
         DP - O(m*n) complexity - Recursive approach - O(3^m)
-
         Example:
         from perturb import levenshtein
         print(levenshtein("Hey","HEY"))
         2.0
-
         #Normalize Levenshtein Distance - Total strategy
         print(levenshtein("Hey", "HEY", normalize="sum"))
         0.33333
-
         #Normalize LCS - Max Strategy
         print(levenshtein("HeyS", "HEY", normalize="lcs"))
         0.75
-
-
+        #osa
+        print(levenshtein("Hey", "Hye",osa=True))
+        2
+        
+        if Optimal string alignment (OSA) flag is set, transpositions are considered too.
+        Assumption: no substring will be edited more than once.
         :params
         :text1 : First string to be compared
         :text2 : Second string to be compared
         :normalize: pass "sum" for total Levenshtein distance, "lcs" for maximum normalization, "none" default
+        :osa: pass True for Optimal String Alignment (Levenshtein + transpositions), False default
         :type text1: String
         :type text2: String
         :type normalize: String
-
         returns levenshtein distance
         :return type: float
-
         IMPORTANT NOTE :
         The normalized distance is not a metric, as it violates the triangle inequality.
         https://stackoverflow.com/questions/45783385/normalizing-the-edit-distance
@@ -79,15 +79,22 @@ class Levenshtein(CharacterMetrics):
 
         for x in range(1, size_x):
             for y in range(1, size_y):
-                if text1[x - 1] == text2[y - 1]:
+                cost_substitution = 0 if text1[x - 1] == text2[y - 1] else 1
+                matrix[x, y] = min(
+                    matrix[x - 1, y] + 1,
+                    matrix[x - 1, y - 1] + cost_substitution,
+                    matrix[x, y - 1] + 1,
+                )
+
+                if (
+                    osa
+                    and x > 1
+                    and y > 1
+                    and text1[x - 1] == text2[y - 2]
+                    and text1[x - 2] == text2[y - 1]
+                ):
                     matrix[x, y] = min(
-                        matrix[x - 1, y] + 1, matrix[x - 1, y - 1], matrix[x, y - 1] + 1
-                    )
-                else:
-                    matrix[x, y] = min(
-                        matrix[x - 1, y] + 1,
-                        matrix[x - 1, y - 1] + 1,
-                        matrix[x, y - 1] + 1,
+                        matrix[x, y], matrix[x - 2, y - 2] + cost_substitution
                     )
         distance = matrix[size_x - 1, size_y - 1]
         if normalize == "sum":
