@@ -9,6 +9,7 @@ Sphinx==1.8.5
 twine==1.14.0
 tensorflow==2.2.0
 tensorflow-hub==0.8.0
+tqdm==4.46.0
 
 setuptools
 pytest==5.4.2
