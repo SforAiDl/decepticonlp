@@ -41,11 +41,9 @@ def test_temporal_score(text, expected_result):
 
 @pytest.mark.parametrize(
     "text,expected_result",
-    [
-        ("i like dogs", torch.tensor([[5.9605e-08], [1.9789e-05], [0.0000e00]])),
-    ],
+    [("i like dogs", torch.tensor([[5.9605e-08], [1.9789e-05], [0.0000e00]])),],
 )
-def test_tailed_temporal_score(text, expected_result): # pragma: no cover
+def test_tailed_temporal_score(text, expected_result):  # pragma: no cover
     torch.manual_seed(99)
     text = sentenceToTensor(text)
     rc = temporal_metrics.RankCharacters()
