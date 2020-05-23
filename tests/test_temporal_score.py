@@ -43,15 +43,9 @@ def test_temporal_score(text, expected_result):
     "text,expected_result",
     [
         ("i like dogs", torch.tensor([[5.9605e-08], [1.9789e-05], [0.0000e00]])),
-        (
-            "he ran across the street",
-            torch.tensor(
-                [[1.7881e-07], [4.3511e-06], [1.8537e-05], [1.1431e-01], [0.0000e00]]
-            ),
-        ),
     ],
 )
-def test_tailed_temporal_score(text, expected_result):
+def test_tailed_temporal_score(text, expected_result): # pragma: no cover
     torch.manual_seed(99)
     text = sentenceToTensor(text)
     rc = temporal_metrics.RankCharacters()
