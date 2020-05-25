@@ -9,11 +9,11 @@ import numpy as np
 import json
 from pathlib import Path
 
-json_path = Path("decepticonlp/metrics/glove_sample.json")
+json_path = Path("tests/glove_sample.json")
 model_gigaword = json.load(open(json_path, "r"))
 
 
-def sentenceToTensor(text):
+def sentence_to_tensor(text):
     op = torch.zeros((len(text.split(" ")), len(model_gigaword["i"])))
     for i, word in enumerate(text.split(" ")):
         op[i] = torch.tensor(model_gigaword[word])
@@ -34,9 +34,9 @@ def sentenceToTensor(text):
 )
 def test_temporal_score(text, expected_result):
     torch.manual_seed(99)
-    text = sentenceToTensor(text)
-    rc = temporal_metrics.RankCharacters()
-    assert all(torch.isclose(expected_result, rc.temporal_score(text), rtol=1e-4))
+    text = sentence_to_tensor(text)
+    rw = temporal_metrics.RankWords()
+    assert all(torch.isclose(expected_result, rw.temporal_score(text), rtol=1e-4))
 
 
 @pytest.mark.parametrize(
@@ -45,9 +45,9 @@ def test_temporal_score(text, expected_result):
 )
 def test_tailed_temporal_score(text, expected_result):
     torch.manual_seed(99)
-    text = sentenceToTensor(text)
-    rc = temporal_metrics.RankCharacters()
-    assert all(torch.isclose(expected_result, rc.temportal_tail_score(text), rtol=1e-4))
+    text = sentence_to_tensor(text)
+    rw = temporal_metrics.RankWords()
+    assert all(torch.isclose(expected_result, rw.temportal_tail_score(text), rtol=1e-4))
 
 
 @pytest.mark.parametrize(
@@ -65,8 +65,8 @@ def test_tailed_temporal_score(text, expected_result):
 )
 def test_combined_temporal_score(text, lambda_, expected_result):
     torch.manual_seed(99)
-    text = sentenceToTensor(text)
-    rc = temporal_metrics.RankCharacters()
+    text = sentence_to_tensor(text)
+    rw = temporal_metrics.RankWords()
     assert all(
-        torch.isclose(expected_result, rc.combined_score(text, lambda_), rtol=1e-4)
+        torch.isclose(expected_result, rw.combined_score(text, lambda_), rtol=1e-4)
     )
