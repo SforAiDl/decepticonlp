@@ -13,7 +13,7 @@ class CharacterMetrics(metaclass=abc.ABCMeta):
         An abstract class used to represent the character metrics. Subclasses implement the calculate method.
         Methods
         -------
-        apply(self, text1: str, text2: str, **kwargs)
+        calculate(self, text1: str, text2: str, **kwargs)
             - calculates the similarity/distance between two strings using the appropriate metric.
     """
 
