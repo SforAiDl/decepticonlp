@@ -69,16 +69,7 @@ def test_tailed_temporal_score(text, expected_result):
 
 @pytest.mark.parametrize(
     "text,lambda_,expected_result",
-    [
-        ("i like dogs", 0.5, torch.tensor([[1.4901e-07], [3.1948e-05], [8.4886e-01]])),
-        (
-            "he ran across the street",
-            0.5,
-            torch.tensor(
-                [[2.6822e-07], [5.8115e-06], [4.7475e-05], [2.1394e-01], [9.7338e-01]]
-            ),
-        ),
-    ],
+    [("i like dogs", 0.5, torch.tensor([[1.4901e-07], [3.1948e-05], [8.4886e-01]]))],
 )
 def test_combined_temporal_score(text, lambda_, expected_result):
     torch.manual_seed(99)
