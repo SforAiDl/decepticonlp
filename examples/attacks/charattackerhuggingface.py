@@ -1,6 +1,6 @@
 __author__ = "Abheesht Sharma"
 
-# Example Code on the use of CharAttacker using a HuggingFace ForSequenceClassification Model
+# Example Code on the use of CharAttacker using BertForSequenceClassification Model
 
 # Import the important libraries
 import sys
@@ -17,7 +17,7 @@ from torch.utils.data import TensorDataset, DataLoader, RandomSampler, Sequentia
 from transformers import BertTokenizer, BertConfig
 from transformers import BertForSequenceClassification
 from transformers import AdamW, get_linear_schedule_with_warmup
-from decepticonlp.attacks import attack
+from decepticonlp.attacks import attacker
 from decepticonlp.transforms import transforms
 
 from sklearn.model_selection import train_test_split
@@ -157,12 +157,11 @@ model = torch.load(
     map_location="cpu",
 ).to(device)
 
-attacker = attack.CharAttacker(
+attacker = attacker.Attacker(
     model,
     test_dataloader,
     adv_test_dataloader,
     input_format=["input_ids", "attention_mask", "labels"],
-    huggingface=True,
     criterion=torch.nn.CrossEntropyLoss(),
     accuracy=True,
     logs_after_every=50,

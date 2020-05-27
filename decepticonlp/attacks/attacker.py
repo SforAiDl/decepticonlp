@@ -11,7 +11,7 @@ loss_type_tuple = (
 )
 
 
-class CharAttacker(object):
+class Attacker(object):
     """
         Performs inference on original dataset and adversarial dataset and compares their performance. This class is for models which return the logits (the output before activation).
         Args:
@@ -29,14 +29,9 @@ class CharAttacker(object):
             -labels' necessary.
             Eg:
                 For BertForSequenceClassification, the input_format will be ['input_ids','attention_masks','labels'] (if you are feeding only these three to the model).
-        
-        huggingface: boolean (default: True)
-            -Should be True for models such as BertForSequenceClassification, XLNetForSeqeunceClassification, etc.
-            -False otherwise
 
         criterion: PyTorch Loss (default: torch.nn.CrossEntropyLoss())
             -should be one of torch.nn.modules.loss.BCEWithLogitsLoss, torch.nn.modules.loss.CrossEntropyLoss
-            -If huggingface = True, by default, the criterion = torch.nn.CrossEntropyLoss()
         
         accuracy: boolean (default: True)
             -If True, logs and prints the accuracy
@@ -60,16 +55,12 @@ class CharAttacker(object):
         data_loader,
         adversarial_data_loader,
         input_format=["input_ids", "labels"],
-        huggingface=True,
         criterion=torch.nn.CrossEntropyLoss(),
         accuracy=True,
         threshold=0.5,
         logs_after_every=50,
         device=torch.device("cpu"),
     ):
-
-        if huggingface:
-            self.criterion = torch.nn.CrossEntropyLoss()
 
         # Assertion Tests
         assert "labels" in input_format, self.input_format_labels_error_message()
@@ -80,7 +71,6 @@ class CharAttacker(object):
         self.data_loader = data_loader
         self.adversarial_data_loader = adversarial_data_loader
         self.input_format = input_format
-        self.huggingface = huggingface
         self.criterion = criterion
         self.accuracy = accuracy
         self.threshold = threshold
@@ -97,78 +87,17 @@ class CharAttacker(object):
 
         print("Running inference on original dataset")
 
-        if self.huggingface:
-            (
-                self.loss_logs["original"],
-                self.accuracy_logs["original"],
-            ) = self.inference_loop_huggingface(self.data_loader)
-        else:
-            (
-                self.loss_logs["original"],
-                self.accuracy_logs["original"],
-            ) = self.inference_loop(self.data_loader)
+        (
+            self.loss_logs["original"],
+            self.accuracy_logs["original"],
+        ) = self.inference_loop(self.data_loader)
 
         print("Running inference on adversarial dataset")
 
-        if self.huggingface:
-            (
-                self.loss_logs["adversarial"],
-                self.accuracy_logs["adversarial"],
-            ) = self.inference_loop_huggingface(self.adversarial_data_loader)
-        else:
-            (
-                self.loss_logs["adversarial"],
-                self.accuracy_logs["adversarial"],
-            ) = self.inference_loop(self.adversarial_data_loader)
-
-    def inference_loop_huggingface(self, dataloader):
-        # Define inference loop for dataloader
-        running_loss = 0.0
-        correct_total = 0
-        counter = 1
-
-        loss_logs = []
-        accuracy_logs = []
-        tqdm_dataloader = tqdm(dataloader)
-
-        for batch in tqdm_dataloader:
-            inputs = batch
-            input_dict = {}
-            for k, i in enumerate(self.input_format):
-                input_dict[i] = inputs[k].long().to(self.device)
-
-            # Forward pass
-            outputs = self.model(**input_dict)
-            # Compute Loss and probabilities
-            computed_loss = outputs[0]
-            logits = outputs[1]
-            probabilities = torch.nn.functional.log_softmax(logits, dim=1)
-
-            running_loss += computed_loss.item()
-            loss = running_loss / (counter * dataloader.batch_size)
-
-            # Log the loss
-            if counter % self.logs_after_every == 0:
-                loss_logs.append(loss)
-
-            tqdm_dataloader.set_description("Loss (%f)" % (loss))
-
-            # Compute Accuracy
-            if self.accuracy:
-                _, computed_labels = torch.max(probabilities, dim=1)
-                correct = (computed_labels == input_dict["labels"]).float().sum()
-
-                correct_total += correct
-                acc = correct_total / (counter * dataloader.batch_size)
-
-                if counter % self.logs_after_every == 0:
-                    accuracy_logs.append(acc)
-
-                tqdm_dataloader.set_postfix(Accuracy=acc)
-
-            # Increment counter
-            counter += 1
-        return loss_logs, accuracy_logs
+        (
+            self.loss_logs["adversarial"],
+            self.accuracy_logs["adversarial"],
+        ) = self.inference_loop(self.adversarial_data_loader)
 
     def inference_loop(self, dataloader):
         # Define inference loop for dataloader
@@ -189,8 +118,11 @@ class CharAttacker(object):
                     input_dict[i] = inputs[k].long().to(self.device)
                 else:
                     labels = inputs[k].long().to(self.device)
+
             # Forward pass
             outputs = self.model(**input_dict)
+            if isinstance(outputs, (tuple, list)):
+                outputs = outputs[0]
 
             # Compute Loss
 

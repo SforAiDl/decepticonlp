@@ -27,7 +27,7 @@ from sklearn.metrics import mean_squared_error
 from sklearn.model_selection import train_test_split
 
 
-from decepticonlp.attacks import attack
+from decepticonlp.attacks import attacker
 from decepticonlp.transforms import transforms
 
 
@@ -167,12 +167,11 @@ adv_validation_loader = ReviewsDataset(X_valid_adv, y_valid_adv)
 val_dl_adv = DataLoader(adv_validation_loader, batch_size=batch_size)
 
 
-attacker = attack.CharAttacker(
+attacker = attacker.Attacker(
     model,
     val_dl_original,
     val_dl_adv,
     input_format=["x", "labels", "l"],
-    huggingface=False,
     criterion=torch.nn.CrossEntropyLoss(),
     accuracy=True,
     logs_after_every=50,
