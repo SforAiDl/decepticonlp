@@ -16,7 +16,9 @@ from decepticonlp.transforms import transforms
 )
 def test_add_space(text, expected_result):
     random.seed(42)
-    tfms = transforms.AddChar(extractor="RandomWordExtractor",top_k=1, char_perturb=False)
+    tfms = transforms.AddChar(
+        extractor="RandomWordExtractor", top_k=1, char_perturb=False
+    )
     assert tfms(text) == expected_result
 
 
@@ -30,7 +32,9 @@ def test_add_space(text, expected_result):
 )
 def test_add_char(text, expected_result):
     random.seed(42)
-    tfms = transforms.AddChar(extractor="RandomWordExtractor", top_k=1, char_perturb=True)
+    tfms = transforms.AddChar(
+        extractor="RandomWordExtractor", top_k=1, char_perturb=True
+    )
     assert tfms(text) == expected_result
 
 
@@ -86,7 +90,9 @@ def test_delete_char(text, expected_result):
 )
 def test_typo_char(text, expected_result):
     random.seed(42)
-    tfms = transforms.TypoChar(extractor="RandomWordExtractor", top_k=1, probability=0.3)
+    tfms = transforms.TypoChar(
+        extractor="RandomWordExtractor", top_k=1, probability=0.3
+    )
     assert tfms(text) == expected_result
 
 
@@ -100,7 +106,9 @@ def test_typo_char(text, expected_result):
 )
 def test_visually_similar_char(text, expected_result):
     random.seed(42)
-    tfms = transforms.VisuallySimilarChar(extractor="RandomWordExtractor", top_k=1, seed=None)
+    tfms = transforms.VisuallySimilarChar(
+        extractor="RandomWordExtractor", top_k=1, seed=None
+    )
     assert tfms(text) == expected_result
 
 
@@ -117,7 +125,7 @@ def test_compose_transforms(text, expected_result):
     tfms = transforms.Compose(
         [
             transforms.AddChar(),
-            transforms.ShuffleChar("RandomWordExtractor",2, True),
+            transforms.ShuffleChar("RandomWordExtractor", 2, True),
             transforms.VisuallySimilarChar(top_k=2),
             transforms.TypoChar("RandomWordExtractor", top_k=1, probability=0.5),
         ]

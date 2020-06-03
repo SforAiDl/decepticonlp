@@ -107,14 +107,16 @@ class AddChar(Transforms):
             self.extractor = basic.RandomImportantWordExtractor()
 
         self.top_k = top_k
-        
+
         self.char_perturb = char_perturb
         self.space_char_perturb = perturbations.InsertSpaceCharacterPerturbations()
         self.ignore = ignore
 
     def __call__(self, text):
         kwargs = {"char_perturb": self.char_perturb, "ignore": self.ignore}
-        return self.apply(text, self.extractor, self.top_k, self.space_char_perturb, **kwargs)
+        return self.apply(
+            text, self.extractor, self.top_k, self.space_char_perturb, **kwargs
+        )
 
     def __repr__(self):
         return self.__class__.__name__ + "()"
@@ -142,7 +144,9 @@ class ShuffleChar(Transforms):
 		This is fascinatign!
 	"""
 
-    def __init__(self, extractor="RandomWordExtractor", top_k=1, mid=False, ignore=True):
+    def __init__(
+        self, extractor="RandomWordExtractor", top_k=1, mid=False, ignore=True
+    ):
 
         assert extractor in ["RandomWordExtractor"], self.extractor_not_valid_message()
 
@@ -157,7 +161,9 @@ class ShuffleChar(Transforms):
 
     def __call__(self, text):
         kwargs = {"mid": self.mid, "ignore": self.ignore}
-        return self.apply(text, self.extractor, self.top_k, self.shuffle_char_perturb, **kwargs)
+        return self.apply(
+            text, self.extractor, self.top_k, self.shuffle_char_perturb, **kwargs
+        )
 
     def __repr__(self):
         return self.__class__.__name__ + "()"
@@ -196,7 +202,9 @@ class DeleteChar(Transforms):
 
     def __call__(self, text):
         kwargs = {"ignore": self.ignore}
-        return self.apply(text, self.extractor, self.top_k, self.delete_char_perturb, **kwargs)
+        return self.apply(
+            text, self.extractor, self.top_k, self.delete_char_perturb, **kwargs
+        )
 
     def __repr__(self):
         return self.__class__.__name__ + "()"
@@ -223,7 +231,9 @@ class TypoChar(Transforms):
 		This us fascinating!
 	"""
 
-    def __init__(self, extractor="RandomWordExtractor", top_k=1, probability=0.1, ignore=True):
+    def __init__(
+        self, extractor="RandomWordExtractor", top_k=1, probability=0.1, ignore=True
+    ):
 
         assert extractor in ["RandomWordExtractor"], self.extractor_not_valid_message()
 
@@ -238,7 +248,9 @@ class TypoChar(Transforms):
 
     def __call__(self, text):
         kwargs = {"probability": self.probability, "ignore": self.ignore}
-        return self.apply(text, self.extractor, self.top_k, self.typo_char_perturb, **kwargs)
+        return self.apply(
+            text, self.extractor, self.top_k, self.typo_char_perturb, **kwargs
+        )
 
     def __repr__(self):
         return self.__class__.__name__ + "()"
@@ -265,7 +277,9 @@ class VisuallySimilarChar(Transforms):
 		T̕h̒i̕s̒ is fascinating!
 	"""
 
-    def __init__(self, extractor="RandomWordExtractor", top_k=1, seed=None, ignore=True):
+    def __init__(
+        self, extractor="RandomWordExtractor", top_k=1, seed=None, ignore=True
+    ):
 
         assert extractor in ["RandomWordExtractor"], self.extractor_not_valid_message()
 
@@ -283,7 +297,11 @@ class VisuallySimilarChar(Transforms):
     def __call__(self, text):
         kwargs = {"seed": self.seed, "ignore": self.ignore}
         return self.apply(
-            text, self.extractor, self.top_k, self.visually_similar_char_perturb, **kwargs
+            text,
+            self.extractor,
+            self.top_k,
+            self.visually_similar_char_perturb,
+            **kwargs
         )
 
     def __repr__(self):
