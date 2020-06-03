@@ -27,9 +27,9 @@ class Transforms(object):
     def extractor_not_valid_message(self):
         return "Extractor chosen invalid. Please choose from " + str(extractor_list)
 
-    def apply(self, text, extractor, perturb_type, **kwargs):
+    def apply(self, text, extractor, top_k, perturb_type, **kwargs):
         words = text.split(" ")
-        indices = extractor.extract(words)
+        indices = extractor.extract(words=words, top_k=top_k)
 
         for index in indices:
             words[index] = perturb_type.apply(words[index], **kwargs)
@@ -82,6 +82,7 @@ class AddChar(Transforms):
 		Args:
 		extractor: str (default: "RandomWordCharacter")
 			-One of ["RandomWordExtractor"]
+		top_k: Number of words to be extracted
 		char_perturb: boolean (default: False)
 			-If True, add space in word randomly.
 			-If False, add character in word randomly.
@@ -97,7 +98,7 @@ class AddChar(Transforms):
 	"""
 
     def __init__(
-        self, extractor="RandomWordExtractor", char_perturb=False, ignore=True
+        self, extractor="RandomWordExtractor", top_k=1, char_perturb=False, ignore=True
     ):
 
         assert extractor in ["RandomWordExtractor"], self.extractor_not_valid_message()
@@ -105,13 +106,15 @@ class AddChar(Transforms):
         if extractor == "RandomWordExtractor":
             self.extractor = basic.RandomImportantWordExtractor()
 
+        self.top_k = top_k
+        
         self.char_perturb = char_perturb
         self.space_char_perturb = perturbations.InsertSpaceCharacterPerturbations()
         self.ignore = ignore
 
     def __call__(self, text):
         kwargs = {"char_perturb": self.char_perturb, "ignore": self.ignore}
-        return self.apply(text, self.extractor, self.space_char_perturb, **kwargs)
+        return self.apply(text, self.extractor, self.top_k, self.space_char_perturb, **kwargs)
 
     def __repr__(self):
         return self.__class__.__name__ + "()"
@@ -124,6 +127,7 @@ class ShuffleChar(Transforms):
 		Args:
 		extractor: str (default: "RandomWordExtractor")
 			-One of ["RandomWordExtractor"]
+		top_k: Number of words to be extracted
 		mid: boolean (default: False)
 			-if True, shuffles the characters of a word at random, barring the initial and last character
             -if False, swaps any two characters of a word at random, barring the initial and last character
@@ -138,12 +142,14 @@ class ShuffleChar(Transforms):
 		This is fascinatign!
 	"""
 
-    def __init__(self, extractor="RandomWordExtractor", mid=False, ignore=True):
+    def __init__(self, extractor="RandomWordExtractor", top_k=1, mid=False, ignore=True):
 
         assert extractor in ["RandomWordExtractor"], self.extractor_not_valid_message()
 
         if extractor == "RandomWordExtractor":
             self.extractor = basic.RandomImportantWordExtractor()
+
+        self.top_k = top_k
 
         self.shuffle_char_perturb = perturbations.ShuffleCharacterPerturbations()
         self.mid = mid
@@ -151,7 +157,7 @@ class ShuffleChar(Transforms):
 
     def __call__(self, text):
         kwargs = {"mid": self.mid, "ignore": self.ignore}
-        return self.apply(text, self.extractor, self.shuffle_char_perturb, **kwargs)
+        return self.apply(text, self.extractor, self.top_k, self.shuffle_char_perturb, **kwargs)
 
     def __repr__(self):
         return self.__class__.__name__ + "()"
@@ -164,6 +170,7 @@ class DeleteChar(Transforms):
 		Args:
 		extractor: str (default: "RandomWordExtractor")
 			-One of ["RandomWordExtractor"]
+		top_k: Number of words to be extracted
 		ignore: boolean (default: True)
 			-If True, ignore assertion errors (recommended).
 			-If False, do not ignore assertion errors.
@@ -175,19 +182,21 @@ class DeleteChar(Transforms):
 		This is fascinting!
 	"""
 
-    def __init__(self, extractor="RandomWordExtractor", ignore=True):
+    def __init__(self, extractor="RandomWordExtractor", top_k=1, ignore=True):
 
         assert extractor in ["RandomWordExtractor"], self.extractor_not_valid_message()
 
         if extractor == "RandomWordExtractor":
             self.extractor = basic.RandomImportantWordExtractor()
 
+        self.top_k = top_k
+
         self.delete_char_perturb = perturbations.DeleteCharacterPerturbations()
         self.ignore = ignore
 
     def __call__(self, text):
         kwargs = {"ignore": self.ignore}
-        return self.apply(text, self.extractor, self.delete_char_perturb, **kwargs)
+        return self.apply(text, self.extractor, self.top_k, self.delete_char_perturb, **kwargs)
 
     def __repr__(self):
         return self.__class__.__name__ + "()"
@@ -200,6 +209,7 @@ class TypoChar(Transforms):
 		Args:
 		extractor: str (default: "RandomWordExtractor")
 			-One of ["RandomWordExtractor"]
+		top_k: Number of words to be extracted
 		probability: float in range [0,1] (default: 0.1)
 			-probability*100 percent characters in the word will become typos.
 		ignore: boolean (default: True)
@@ -213,12 +223,14 @@ class TypoChar(Transforms):
 		This us fascinating!
 	"""
 
-    def __init__(self, extractor="RandomWordExtractor", probability=0.1, ignore=True):
+    def __init__(self, extractor="RandomWordExtractor", top_k=1, probability=0.1, ignore=True):
 
         assert extractor in ["RandomWordExtractor"], self.extractor_not_valid_message()
 
         if extractor == "RandomWordExtractor":
             self.extractor = basic.RandomImportantWordExtractor()
+
+        self.top_k = top_k
 
         self.typo_char_perturb = perturbations.TypoCharacterPerturbations()
         self.probability = probability
@@ -226,7 +238,7 @@ class TypoChar(Transforms):
 
     def __call__(self, text):
         kwargs = {"probability": self.probability, "ignore": self.ignore}
-        return self.apply(text, self.extractor, self.typo_char_perturb, **kwargs)
+        return self.apply(text, self.extractor, self.top_k, self.typo_char_perturb, **kwargs)
 
     def __repr__(self):
         return self.__class__.__name__ + "()"
@@ -239,6 +251,7 @@ class VisuallySimilarChar(Transforms):
 		Args:
 		extractor: str (default: "RandomWordExtractor")
 			-One of ["RandomWordExtractor"]
+		top_k: Number of words to be extracted
 		seed: int (default: None)
 			-seed for random
 		ignore: boolean (default: True)
@@ -252,12 +265,14 @@ class VisuallySimilarChar(Transforms):
 		T̕h̒i̕s̒ is fascinating!
 	"""
 
-    def __init__(self, extractor="RandomWordExtractor", seed=None, ignore=True):
+    def __init__(self, extractor="RandomWordExtractor", top_k=1, seed=None, ignore=True):
 
         assert extractor in ["RandomWordExtractor"], self.extractor_not_valid_message()
 
         if extractor == "RandomWordExtractor":
             self.extractor = basic.RandomImportantWordExtractor()
+
+        self.top_k = top_k
 
         self.visually_similar_char_perturb = perturbations.VisuallySimilarCharacterPerturbations(
             "unicode", "homoglyph"
@@ -268,7 +283,7 @@ class VisuallySimilarChar(Transforms):
     def __call__(self, text):
         kwargs = {"seed": self.seed, "ignore": self.ignore}
         return self.apply(
-            text, self.extractor, self.visually_similar_char_perturb, **kwargs
+            text, self.extractor, self.top_k, self.visually_similar_char_perturb, **kwargs
         )
 
     def __repr__(self):
